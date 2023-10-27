@@ -13,3 +13,5 @@ x86/
 *.iobj
 *.ilk
 *.exe
+
+!libraries/SDL2-2.0.12/lib/*
