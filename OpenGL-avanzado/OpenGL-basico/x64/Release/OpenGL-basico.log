@@ -1,0 +1,8 @@
+﻿  glad.c
+  main.cpp
+C:\Users\NRivoir\OneDrive\Documents\GitHub\CGA_Lab_2\OpenGL-avanzado\main.cpp(197,12): warning C4305: '+=': truncation from 'double' to 'float'
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 224 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  OpenGL-basico.vcxproj -> C:\Users\NRivoir\OneDrive\Documents\GitHub\CGA_Lab_2\OpenGL-avanzado\x64\Release\OpenGL-avanzado.exe
