@@ -1,16 +1,8 @@
 #include "Camara.h"
 #include "Utils.h"
 
-#include "SDL.h"
-#include "SDL_opengl.h"
-#include <GL/glu.h>
-#include <iostream>
-#include "FreeImage.h"
-#include <stdio.h>
-#include <conio.h>
-#include <chrono>
-
 #include "Renderer.h"
+
 #include "Timer.h"
 
 using namespace cam;
@@ -37,7 +29,7 @@ void Camara::update(float y) {
 
 void Camara::update() {
 
-	gluLookAt(eye.x, eye.y, eye.z, center.x, center.y, center.z, up.x, up.y, up.z);
+    lookAt(eye.x, eye.y, eye.z, center.x, center.y, center.z, up.x, up.y, up.z);
 }
 
 void Camara::getNextCameraMode() {
@@ -100,21 +92,22 @@ void Camara::rotate(float xRotation, float yRotation) {
     std::cout << "Eye X : " << eye.x << " Y : " << eye.y << " Z : " << eye.z << std::endl;
 }
 
-//void Camara::rotateAroundCharacter(Vector3 characterPos, Vector3 cameraPos, float xRotation, float yRotation) {
-//
-//    float deltaTime = Timer::getInstance()->getWorldDeltaTime();
-//
-//    float xRotationRad = xRotation * (M_PI / 180.0f);
-//    
-//    cameraPos = rotateAroundYAxisAndPoint(characterPos, cameraPos, xRotation);
-//
-//    eye = cameraPos;
-//    Vector3 cameraToPlayer = normalize(characterPos - cameraPos);
-//    lookingPoint = cameraToPlayer;
-//    center = characterPos;
-//
-//    update();
-//}
+
+void Camara::lookAt(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ) {
+    Vector3 right, up, forward;
+    forward = -normalize(Vector3(centerX - eyeX, centerY - eyeY, centerZ - eyeZ));
+    up = Vector3(upX, upY, upZ);
+    right = normalize(cross_product(up, forward));
+    up = normalize(cross_product(forward, right));
+
+    const GLfloat mat[16] =
+    { right.x, up.x,   forward.x,   0,
+     right.y,  up.y,   forward.y,   0,
+     right.z,  up.z,   forward.z,   0,
+     0,     0,      0,      1 };
+    glMultMatrixf(mat);
+    glTranslated(-eyeX, -eyeY, -eyeZ);
+}
 
 
 

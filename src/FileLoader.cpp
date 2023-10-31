@@ -1,5 +1,6 @@
 #include "FileLoader.h"
 #include "utils.h"
+#include "FreeImage.h"
 
 #include <iostream>
 #include <fstream>
@@ -89,26 +90,27 @@ Mesh FileLoader::load_OBJ(std::string path) {
 Texture FileLoader::load_PNG(std::string path)
 {
     
-    FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename(path.c_str());
-    FIBITMAP* bitmap = FreeImage_Load(fif, path.c_str());
-    if (bitmap == nullptr) {
-        return { 0, nullptr, 0, 0 };
-    }
-    bitmap = FreeImage_ConvertTo24Bits(bitmap);
-    unsigned int w = FreeImage_GetWidth(bitmap);
-    unsigned int h = FreeImage_GetHeight(bitmap);
-    BYTE* data = FreeImage_GetBits(bitmap);
+    //FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename(path.c_str());
+    //FIBITMAP* bitmap = FreeImage_Load(fif, path.c_str());
+    //if (bitmap == nullptr) {
+    //    return { 0, nullptr, 0, 0 };
+    //}
+    //bitmap = FreeImage_ConvertTo24Bits(bitmap);
+    //unsigned int w = FreeImage_GetWidth(bitmap);
+    //unsigned int h = FreeImage_GetHeight(bitmap);
+    //BYTE* data = FreeImage_GetBits(bitmap);
 
-    unsigned int id;
+    //unsigned int id;
 
-    glGenTextures(1, &id);
+    //glGenTextures(1, &id);
 
-    glBindTexture(GL_TEXTURE_2D, id);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
+    //glBindTexture(GL_TEXTURE_2D, id);
+    //glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    //glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    //glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    //glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
   
-    return {id, data, w, h};
+    //return {id, data, w, h};
+    return Texture( 0, nullptr, 0, 0 );
 }

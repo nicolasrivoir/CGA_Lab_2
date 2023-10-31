@@ -6,13 +6,10 @@
 #include "Mesh.h"
 #include "FileLoader.h"
 #include "Renderer.h"
-#include "Hud.h"
 #include "Camara.h"
-#include "GameSettings.h"
 
 World::World() : player(Vector3(0, 0, 0), FileLoader::load_OBJ("data/models/Doodler.obj"), new Texture(FileLoader::load_PNG("data/textures/Doodler.png")), -0.6f, 0.7f, 0.2f, -13.0f, 13.0f) {
 
-    this->hud = new Hud();
     //Vector3 player_position = Vector3(0, 0, 0);
 
     Vector3 camera_eye = Vector3(0, 0, 0);      // Posición de la cámara
@@ -188,7 +185,6 @@ void World::draw() {
     else {
         player.draw();
     }
-    hud->draw(score);
     
 
     Renderer renderer = *Renderer::get_instance();

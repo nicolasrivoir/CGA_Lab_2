@@ -1,10 +1,6 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include <iostream>
-#include "SDL.h"
-#include "SDL_opengl.h"
-#include <GL/glu.h>
 #include "utils.h"
 #include "Mesh.h"
 #include "Texture.h"
