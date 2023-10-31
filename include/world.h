@@ -9,7 +9,6 @@
 #include "Player.h"
 #include "Timer.h"
 #include "Camara.h"
-#include "Hud.h"
 
 #include <iostream>
 
@@ -84,8 +83,6 @@ public:
 
     //Camara camara;
     cam::Camara camara;
-
-    Hud* hud;
 
     //Light light;
     float light;

@@ -41,6 +41,8 @@ namespace cam {
 
         void move(float x, float y, float z);
 
+        void lookAt(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ);
+
         CameraMode cameraMode;
 
         Vector3 eye;

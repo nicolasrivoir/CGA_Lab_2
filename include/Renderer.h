@@ -1,14 +1,13 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
+#include "glad/glad.h"
 #include "SDL.h"
 #include "SDL_opengl.h"
-#include <GL/glu.h>
 
 #include "utils.h"
 #include "Mesh.h"
 #include "Texture.h"
-#include "Text.h"
 
 using namespace math;
 
@@ -36,6 +35,8 @@ public:
 
 	static void init(int* argcp, char** argv);
 
+	static void setPerspective(float yFov, float aspectRatio, float zNear, float zFar);
+
 	void smooth_shading(bool enabled = true);
 
 	void enable_textures(bool enabled = true);
@@ -47,8 +48,6 @@ public:
 	void enable_nightmode(bool enabled = true);
 
 	void draw(const Vector3 position, const Mesh &mesh, Texture* texture, bool mirrored = false, float scale = 1.0f);
-
-	void draw_textbox(const Text text);
 
 	/*
 	* Clears depth-buffer and draws object on top

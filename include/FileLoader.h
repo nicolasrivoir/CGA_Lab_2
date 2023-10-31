@@ -1,10 +1,6 @@
 #ifndef FILE_LOADER_H
 #define FILE_LOADER_H
 
-#include "SDL.h"
-#include "SDL_opengl.h"
-#include <GL/glu.h>
-
 #include "utils.h"
 #include "Mesh.h"
 #include "Texture.h"

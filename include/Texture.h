@@ -1,10 +1,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include "SDL.h"
-#include "SDL_opengl.h"
-#include "FreeImage.h"
-#include <GL/glu.h>
+using BYTE = unsigned char;
 
 struct Texture {
 	const unsigned int id;
