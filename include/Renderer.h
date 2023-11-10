@@ -6,63 +6,55 @@
 #include "SDL_opengl.h"
 
 #include "utils.h"
-#include "Mesh.h"
-#include "Texture.h"
+#include "Scene.h"
+#include "MeshObject.h"
 
-using namespace math;
+#include <memory>
 
 class Renderer
 {
 private:
 
-	static Renderer* instance;
+	SDL_Window* window;
 
-	static SDL_Window* window;
+	SDL_GLContext context;
 
-	static SDL_GLContext context;
+	GLuint shaderprogram; // handle for shader program
 
-	static bool smooth_shading_enabled;
+	bool normalInterpolationEnabled;
 
-	static bool textures_enabled;
+	bool texturesEnabled;
 
-	static bool wireframe_enabled;
+	bool wireframeEnabled;
 
-	Renderer();
+	void initShaders(std::string vertexShaderFile, std::string fragmentShaderFile);
+
+	void initObject(MeshObject& obj);
 
 public:
 
-	static Renderer* get_instance();
+	Renderer();
 
-	static void init(int* argcp, char** argv);
+	Renderer(const Renderer&) = delete;
 
-	static void setPerspective(float yFov, float aspectRatio, float zNear, float zFar);
+	Renderer operator=(const Renderer&) = delete;
 
-	void smooth_shading(bool enabled = true);
+	void toogleNormalInterpolation();
 
-	void enable_textures(bool enabled = true);
+	void toggleTextures();
 
-	void enable_wireframes(bool enabled = true);
+	void toggleWireframes();
 
-	void light(int index, const Vector3 &pos, const Vector3 &color);
-
-	void enable_nightmode(bool enabled = true);
-
-	void draw(const Vector3 position, const Mesh &mesh, Texture* texture, bool mirrored = false, float scale = 1.0f);
+	void draw(MeshObject& obj);
 
 	/*
 	* Clears depth-buffer and draws object on top
 	*/
-	void draw_on_top(const Vector3 position, const Mesh &mesh, Texture* texture, bool mirrored = false, float scale = 1.0f);
+	void drawOnTop(MeshObject& obj);
 
 	void clear();
 
-	void free();
-
-	bool is_wireframe_enabled();
-
-	bool is_smooth_shading_enabled();
-
-	bool are_textures_enabled();
+	~Renderer();
 
 };
 

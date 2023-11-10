@@ -6,10 +6,9 @@
 #include "Utils.h"
 #include <iostream>
 
-using namespace std;
-using namespace math;
-
 namespace cam {
+
+    using namespace::math;
 
     enum ProyectionType {
         PERSPECTIVE,    // 0
@@ -26,6 +25,7 @@ namespace cam {
 
 
     class Camara {
+
     public:
         Camara();
 

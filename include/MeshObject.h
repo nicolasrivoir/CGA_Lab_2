@@ -3,38 +3,29 @@
 
 #include "utils.h"
 
-enum class BufferType {
-	POSITION_BUFFER, NORMAL_BUFFER, TEXCOORD_BUFFER, INDEX_BUFFER
-};
-
-struct Buffer {
-	const void* data;
-	unsigned int count;
-};
+#define DEFAULT_MATERIAL {}
 
 class MeshObject
 {
 private:
 
-	math::Matrix<4, 4> transform;
+	friend class Renderer;
+
+	math::Matrix<4, 4> transformation;
 
 	std::vector<std::shared_ptr<geometry::Mesh>> meshes;
 
 	std::vector<Material> materials;
 
+	std::vector<unsigned int> ids;
+
 public:
 
-	MeshObject(math::Matrix<4,4> transform = math::identity<4>());
+	MeshObject(math::Matrix<4,4> transformation = math::identity<4>());
 
-	void add_mesh(geometry::Mesh &mesh);
+	void addSubMesh(geometry::Mesh &mesh, Material mat = DEFAULT_MATERIAL);
 
-	void add_material(Material material);
-
-	void commit_object();
-
-	std::vector<std::shared_ptr<geometry::Mesh>> get_meshes();
-
-	std::vector<Material> get_materials();
+	void render();
 
 };
 
