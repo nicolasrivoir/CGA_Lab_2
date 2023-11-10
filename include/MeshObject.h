@@ -25,7 +25,11 @@ public:
 
 	void addSubMesh(geometry::Mesh &mesh, Material mat = DEFAULT_MATERIAL);
 
-	void render();
+	void transform(math::Matrix<4, 4> trs);
+
+	void translate(float dx, float dy, float dz);
+
+	void rotate(float angle, const math::Vector3& axis);
 
 };
 

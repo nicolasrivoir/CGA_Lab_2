@@ -150,6 +150,9 @@ namespace math {
 	template <size_t n>
 	bool invert_matrix(Matrix<n, n>& matrix);
 
+	template <size_t n, size_t m>
+	Matrix<n, m> transpose(const Matrix<m, n> &matrix);
+
 	/* END MATRIX */
 
 	float linear_to_sRGB(float value);
