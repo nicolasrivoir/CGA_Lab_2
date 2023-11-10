@@ -161,3 +161,15 @@ bool math::invert_matrix(Matrix<n, n>& matrix)
 
 	return true;
 }
+
+template<size_t n, size_t m>
+math::Matrix<n, m> math::transpose(const Matrix<m, n> &matrix)
+{
+	Matrix<m, n> transpose;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			transpose[i][j] = matrix[j][i];
+		}
+	}
+	return transpose;
+}
