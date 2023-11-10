@@ -1,24 +1,19 @@
 #include "Renderer.h"
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+#include "glm/glm.hpp"
+#include "glm/matrix.hpp"
+#include <glm/gtc/type_ptr.hpp>
 
-Renderer* Renderer::instance = nullptr;
+#include "FreeImage.h"
 
-SDL_Window* Renderer::window = nullptr;
+#include "File.h"
 
-SDL_GLContext Renderer::context = nullptr;
+using namespace math;
+using namespace geometry;
 
-bool Renderer::smooth_shading_enabled = true;
+float r = 0;
 
-bool Renderer::textures_enabled = true;
-
-bool Renderer::wireframe_enabled = false;
-
-Renderer::Renderer() {}
-
-void Renderer::init(int* argcp, char** argv)
-{
+Renderer::Renderer() {
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0) {
 		SDL_Log("Failed to initialize SDL: %s", SDL_GetError());
 		return;
@@ -26,113 +21,175 @@ void Renderer::init(int* argcp, char** argv)
 	window = SDL_CreateWindow("RealTimeRendering",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+		600, 600, 
+		SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 	context = SDL_GL_CreateContext(window);
 
 	SDL_GL_SetSwapInterval(0);
 	gladLoadGLLoader(SDL_GL_GetProcAddress);
 
-	glLoadIdentity();
-	glEnable(GL_CULL_FACE);
-	glEnable(GL_LIGHTING);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glClearColor(0.8f, 0.9f, 1.0f, 1.0f);
 
-	glMatrixMode(GL_PROJECTION);
 
-	glClearColor(1.0f, 0.9f, 0.9f, 1.0f);
-
-	setPerspective(45, 640 / 480.f, 0.1, 100);
-	glEnable(GL_DEPTH_TEST);
-	glMatrixMode(GL_MODELVIEW);
 }
 
-void Renderer::setPerspective(float fovY, float aspect, float zNear, float zFar)
+void Renderer::initShaders(std::string vertexShaderFile, std::string fragmentShaderFile)
 {
-	GLdouble fW, fH;
+	// Shader initialization
+	GLuint p, f, v;	// Handles for shader program & vertex and fragment shaders
 
-	//fH = tan( (fovY / 2) / 180 * pi ) * zNear;
-	fH = tan(fovY / 360 * M_PI) * zNear;
-	fW = fH * aspect;
+	v = glCreateShader(GL_VERTEX_SHADER); // Create vertex shader handle
+	f = glCreateShader(GL_FRAGMENT_SHADER);	// " fragment shader handle
 
-	glFrustum(-fW, fW, -fH, fH, zNear, zFar);
+	const char* vertSource = (const char*)File::loadFile(vertexShaderFile); // load vertex shader source
+	const char* fragSource = (const char*)File::loadFile(fragmentShaderFile);  // load frag shader source
+
+	// Send the shader source to the GPU
+	// Strings here are null terminated - a non-zero final parameter can be
+	// used to indicate the length of the shader source instead
+	glShaderSource(v, 1, &vertSource, 0);
+	glShaderSource(f, 1, &fragSource, 0);
+
+	GLint compiled, linked; // return values for checking for compile & link errors
+
+	// compile the vertex shader and test for errors
+	glCompileShader(v);
+	glGetShaderiv(v, GL_COMPILE_STATUS, &compiled);
+
+	// compile the fragment shader and test for errors
+	glCompileShader(f);
+	glGetShaderiv(f, GL_COMPILE_STATUS, &compiled);
+
+	p = glCreateProgram(); 	// create the handle for the shader program
+	glAttachShader(p, v); // attach vertex shader to program
+	glAttachShader(p, f); // attach fragment shader to program
+
+	glBindAttribLocation(p, 0, "in_Position"); // bind position attribute to location 0
+	glBindAttribLocation(p, 1, "in_Color"); // bind color attribute to location 1
+
+	glLinkProgram(p); // link the shader program and test for errors
+	glGetProgramiv(p, GL_LINK_STATUS, &linked);
+
+	glUseProgram(p);  // Make the shader program the current active program
+
+	delete[] vertSource; // Don't forget to free allocated memory
+	delete[] fragSource; // We allocated this in the loadFile function...
+
+	shaderprogram = p;
 }
 
-Renderer* Renderer::get_instance()
+void Renderer::initObject(MeshObject& obj)
 {
-	if (instance == nullptr) {
-		instance = new Renderer();
+	for (int i = 0; i < obj.ids.size(); i++) {
+		auto& mesh = *obj.meshes[i];
+
+		const size_t vertexCount = mesh.positions.size();
+		const size_t faceCount = mesh.indices.size();
+
+		
+
+		GLfloat* colors = new GLfloat[3 * vertexCount];
+		for (int i = 0; i < 3 * vertexCount; i++) {
+			colors[i] = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+		}
+
+		initShaders((char*)"./shaders/simple.vert", (char*)"./shaders/simple.frag"); // Create and start shader program
+
+		GLuint vertexArray;
+		GLuint buffers[3];
+		glGenVertexArrays(1, &vertexArray); // allocate & assign a Vertex Array Object (VAO)
+		glBindVertexArray(vertexArray); // bind VAO as current object
+		glGenBuffers(3, buffers); // allocate two Vertex Buffer Objects (VBO)
+
+		GLfloat* positions = reinterpret_cast<GLfloat*>(mesh.positions.data());
+		glBindBuffer(GL_ARRAY_BUFFER, buffers[0]); // bind first VBO as active buffer object
+		glBufferData(GL_ARRAY_BUFFER, 3 * vertexCount * sizeof(GLfloat), positions, GL_STATIC_DRAW);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(0);     // Enable attribute index 0 (position)
+
+		GLfloat* indices = reinterpret_cast<GLfloat*>(mesh.indices.data());
+		const unsigned int indexCount = mesh.indices.size();
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]); // bind second VBO as active buffer object
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(GLuint), indices, GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ARRAY_BUFFER, buffers[2]); // bind second VBO as active buffer object
+		glBufferData(GL_ARRAY_BUFFER, 3 * vertexCount * sizeof(GLfloat), colors, GL_STATIC_DRAW);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(1);    // Enable attribute index 1 (color)
+
+		glEnable(GL_DEPTH_TEST); // enable depth testing
+		//glEnable(GL_CULL_FACE); // enable back face culling - try this and see what happens!
+
+		obj.ids[i] = vertexArray;
 	}
-	return instance;
+	
 }
 
-void Renderer::smooth_shading(bool enabled)
+
+void Renderer::toogleNormalInterpolation()
 {
-	if (enabled) {
+	normalInterpolationEnabled = !normalInterpolationEnabled;
+	if (normalInterpolationEnabled) {
 		glShadeModel(GL_SMOOTH);
 	}
 	else {
 		glShadeModel(GL_FLAT);
 	}
-	smooth_shading_enabled = enabled;
 }
 
-void Renderer::enable_textures(bool enabled)
+void Renderer::toggleTextures()
 {
-	textures_enabled = enabled;
+	texturesEnabled = !texturesEnabled;
 }
 
-void Renderer::enable_wireframes(bool enabled)
+void Renderer::toggleWireframes()
 {
-	wireframe_enabled = enabled;
-	int mode = enabled ? GL_LINE : GL_FILL;
+	wireframeEnabled = !wireframeEnabled;
+	int mode = wireframeEnabled ? GL_LINE : GL_FILL;
 	glPolygonMode(GL_FRONT_AND_BACK, mode);
 }
 
-void Renderer::light(int index, const Vector3& pos, const Vector3& color)
-{
-	int selected_light = GL_LIGHT0 + (index % 8);
-	GLfloat luz_posicion[4] = { pos.x, pos.y, pos.z, 1 };
-	GLfloat colorLuz[4] = { color.x, color.y, color.z, 1 };
-	GLfloat luz_direccion[4] = { 1.f, 0.f, 0.f, 1.f };
-	glEnable(selected_light);
-	glLightfv(selected_light, GL_POSITION, luz_posicion);
-	glLightfv(selected_light, GL_DIFFUSE, colorLuz);
-	glLightfv(selected_light, GL_SPOT_DIRECTION, colorLuz);
+void Renderer::draw(MeshObject& obj) {
 
+	for (int i = 0; i < obj.ids.size(); i++) {
+		if (obj.ids[i] == 0) {
+			initObject(obj);
+		}
+		else {
+			glBindVertexArray(obj.ids[i]);
+		}
+
+		// Create perspective projection matrix
+		glm::mat4 projection = glm::perspective(45.0f, 1.0f, 1.0f, 100.f);
+
+		// Create view matrix for the camera
+		r += 0.001; //for camera rotation
+		glm::mat4 view(1.0);
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -4.0f));
+		view = glm::rotate(view, r, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		// Create model matrix for model transformations
+		glm::mat4 model = reinterpret_cast<glm::mat4&>(obj.transformation);
+
+		// pass model as uniform into shader
+		int projectionIndex = glGetUniformLocation(shaderprogram, "projection");
+		glUniformMatrix4fv(projectionIndex, 1, GL_FALSE, glm::value_ptr(projection));
+		// pass model as uniform into shader
+		int viewIndex = glGetUniformLocation(shaderprogram, "view");
+		glUniformMatrix4fv(viewIndex, 1, GL_FALSE, glm::value_ptr(view));
+		// pass model as uniform into shader
+		int modelIndex = glGetUniformLocation(shaderprogram, "model");
+		glUniformMatrix4fv(modelIndex, 1, GL_FALSE, glm::value_ptr(model));
+
+		unsigned int count = 3* obj.meshes[i]->indices.size();
+		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, reinterpret_cast<void*>(0)); // draw the mesh
+	}
+	
 }
 
-void Renderer::draw(const Vector3 position, const Mesh& mesh, Texture* texture, bool mirrored, float scale) {
-	if (textures_enabled && texture != nullptr) {
-		glBindTexture(GL_TEXTURE_2D, texture->id);
-		glEnable(GL_TEXTURE_2D);
-	}
-	else {
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glDisable(GL_TEXTURE_2D);
-		glEnable(GL_COLOR_MATERIAL);
-		glColor3f(0.6f, 0.6f, 0.6f);
-	}
-	float degrees = mirrored ? 180.0f : 0.0f;
-	glPushMatrix();
-	glTranslatef(position.x, position.y, position.z);
-	glScalef(1.0f, scale, 1.0f);
-	glRotatef(degrees, 0.0f, 1.0f, 0.0f);
-	glBegin(GL_TRIANGLES);
-	for (unsigned int i = 0; i < mesh.vertices.size(); i++) {
-		Vector3 vertex = mesh.vertices[i];
-		Vector2 texture_map = mesh.texture_map[i];
-		Vector3 normal = mesh.normals[i];
-		glNormal3f(normal.x, normal.y, normal.z);
-		glTexCoord2f(texture_map.x, texture_map.y);
-		glVertex3f(vertex.x, vertex.y, vertex.z);
-	}
-	glEnd();
-	glPopMatrix();
-}
-
-void Renderer::draw_on_top(const Vector3 position, const Mesh& mesh, Texture* texture, bool mirrored, float scale) {
+void Renderer::drawOnTop(MeshObject& obj) {
 	glClear(GL_DEPTH_BUFFER_BIT);
-	draw(position, mesh, texture, mirrored, scale);
+	draw(obj);
 }
 
 void Renderer::clear()
@@ -141,24 +198,9 @@ void Renderer::clear()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Renderer::free() {
+Renderer::~Renderer()
+{
 	SDL_GL_DeleteContext(context);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
-	delete instance;
-}
-
-bool Renderer::is_wireframe_enabled()
-{
-	return wireframe_enabled;
-}
-
-bool Renderer::are_textures_enabled()
-{
-	return textures_enabled;
-}
-
-bool Renderer::is_smooth_shading_enabled()
-{
-	return smooth_shading_enabled;
 }

@@ -8,12 +8,16 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 // #define TINYGLTF_NOEXCEPTION // optional. disable exception handling.
 #include <tiny_gltf.h>
+#include <iostream>
+#include <fstream>
 
 #include "File.h"
 #include "MeshObject.h"
 
 using namespace File;
 using namespace math;
+
+using BYTE = unsigned char;
 
 /* Auxiliary method */
 template <typename T>
@@ -32,7 +36,7 @@ struct File::GLTF_t {
 	tinygltf::Model model;
 };
 
-GLTF_t* File::load_glb(std::string path)
+GLTF_t* File::loadGLB(std::string path)
 {
 	tinygltf::Model m_model;
 	tinygltf::TinyGLTF loader;
@@ -57,13 +61,13 @@ GLTF_t* File::load_glb(std::string path)
 	return new GLTF_t{ m_model };
 }
 
-std::vector<MeshObject> File::extract_meshes(GLTF_t* file, unsigned int scene_index)
+std::vector<MeshObject> File::extractMeshes(GLTF_t* file, unsigned int scene_index)
 {
 	std::vector<MeshObject> objects;
 
-	auto& rtcscene = file->model.scenes[scene_index];
+	auto& scene = file->model.scenes[scene_index];
 
-	for (int node_index : rtcscene.nodes) {
+	for (int node_index : scene.nodes) {
 
 		auto& node = file->model.nodes[node_index];
 
@@ -159,10 +163,8 @@ std::vector<MeshObject> File::extract_meshes(GLTF_t* file, unsigned int scene_in
 
 				}
 
-				mesh_object.add_mesh(new_mesh);
-				mesh_object.add_material(new_material);
+				mesh_object.addSubMesh(new_mesh, new_material);
 			}
-			mesh_object.commit_object();
 			objects.push_back(mesh_object);
 		}
 	}
@@ -170,13 +172,13 @@ std::vector<MeshObject> File::extract_meshes(GLTF_t* file, unsigned int scene_in
 	return objects;
 }
 
-std::vector<CamConstructorData> File::extract_cameras(GLTF_t* file, unsigned int scene_index)
+std::vector<CamConstructorData> File::extractCameras(GLTF_t* file, unsigned int scene_index)
 {
 	std::vector<CamConstructorData> cameras;
 
-	auto& rtcscene = file->model.scenes[scene_index];
+	auto& scene = file->model.scenes[scene_index];
 
-	for (int node_index : rtcscene.nodes) {
+	for (int node_index : scene.nodes) {
 
 		auto& node = file->model.nodes[node_index];
 
@@ -225,4 +227,48 @@ std::vector<CamConstructorData> File::extract_cameras(GLTF_t* file, unsigned int
 	}
 
 	return cameras;
+}
+
+std::vector<Scene> File::extractScenes(GLTF_t* file)
+{
+	std::vector<Scene> scenes;
+
+	auto fileScenes = file->model.scenes;
+	for (unsigned int scene_index = 0; scene_index < fileScenes.size(); scene_index++) {
+		Scene scene;
+		auto meshes = extractMeshes(file, scene_index);
+		for (auto& mesh : meshes) {
+			scene.addObject(mesh);
+		}
+		scenes.push_back(scene);
+	}
+
+	return scenes;
+}
+
+const BYTE* File::loadFile(std::string fname)
+{
+	int size;
+	char* memblock = NULL;
+
+	// file read based on example in cplusplus.com tutorial
+	// ios::ate opens file at the end
+	std::ifstream file(fname, std::ios::in | std::ios::binary | std::ios::ate);
+	if (file.is_open())
+	{
+		size = (int)file.tellg(); // get location of file pointer i.e. file size
+		memblock = new char[size + 1]; // create buffer with space for null char
+		file.seekg(0, std::ios::beg);
+		file.read(memblock, size);
+		file.close();
+		memblock[size] = 0;
+		std::cout << "file " << fname << " loaded" << std::endl;
+	}
+	else
+	{
+		std::cout << "Unable to open file " << fname << std::endl;
+		// should ideally set a flag or use exception handling
+		// so that calling function can decide what to do now
+	}
+	return reinterpret_cast<BYTE*>(memblock);
 }

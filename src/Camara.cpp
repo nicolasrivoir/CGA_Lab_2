@@ -6,6 +6,7 @@
 #include "Timer.h"
 
 using namespace cam;
+using namespace std;
 using namespace math;
 
 Camara::Camara(){};
