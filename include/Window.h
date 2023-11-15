@@ -7,6 +7,12 @@
 class Window
 {
 
+private:
+
+	SDL_Window* window;
+
+	SDL_GLContext context;
+
 public:
 
 	Window();
@@ -14,12 +20,6 @@ public:
 	void swapBuffers();
 
 	~Window();
-
-private:
-
-	SDL_Window* window;
-
-	SDL_GLContext context;
 
 };
 
