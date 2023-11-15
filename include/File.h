@@ -24,15 +24,16 @@ namespace File
 	const BYTE* loadFile(std::string fname);
 
 	class GLSL {
+
+	private:
+
+		const BYTE* source;
+
 	public:
 
 		GLSL(std::string fname);
 
 		~GLSL();
-
-	private:
-
-		const BYTE* source;
 
 	};
 
