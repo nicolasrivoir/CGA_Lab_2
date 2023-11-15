@@ -13,7 +13,7 @@ private:
 
 	std::vector<MeshObject> objects;
 
-	cam::Camara camera;
+	//cam::Camara camera;
 
 public:
 
@@ -21,7 +21,7 @@ public:
 
 	void addObject(MeshObject obj);
 
-	void setCamera(cam::Camara cam);
+	//void setCamera(cam::Camara cam);
 
 	void update();
 

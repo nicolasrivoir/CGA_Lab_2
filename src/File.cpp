@@ -272,3 +272,15 @@ const BYTE* File::loadFile(std::string fname)
 	}
 	return reinterpret_cast<BYTE*>(memblock);
 }
+
+/* GLSL */
+
+File::GLSL::GLSL(std::string fname)
+{
+	source = loadFile(fname);
+}
+
+File::GLSL::~GLSL()
+{
+	delete source;
+}

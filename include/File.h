@@ -22,6 +22,20 @@ namespace File
 	std::vector<Scene> extractScenes(GLTF_t* file);
 
 	const BYTE* loadFile(std::string fname);
+
+	class GLSL {
+	public:
+
+		GLSL(std::string fname);
+
+		~GLSL();
+
+	private:
+
+		const BYTE* source;
+
+	};
+
 }
 
 #endif

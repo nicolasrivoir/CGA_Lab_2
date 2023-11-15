@@ -1,10 +1,7 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "glad/glad.h"
-#include "SDL.h"
-#include "SDL_opengl.h"
-
+#include "Window.h"
 #include "utils.h"
 #include "Scene.h"
 #include "MeshObject.h"
@@ -15,9 +12,7 @@ class Renderer
 {
 private:
 
-	SDL_Window* window;
-
-	SDL_GLContext context;
+	Window* window;
 
 	GLuint shaderprogram; // handle for shader program
 
@@ -53,8 +48,6 @@ public:
 	void drawOnTop(MeshObject& obj);
 
 	void clear();
-
-	~Renderer();
 
 };
 
