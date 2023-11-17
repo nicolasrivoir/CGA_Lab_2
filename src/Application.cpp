@@ -3,6 +3,10 @@
 #include "File.h"
 #include "timer.h"
 
+Application::Application() : renderer(window)
+{
+}
+
 void Application::mainLoop()
 {
 	auto file = File::loadGLB("data/models/bosque.glb");
@@ -27,7 +31,7 @@ void Application::mainLoop()
 		timer->tick();
 		if (timer->getDeltaTime() >= 1.0f / framerate) {
 			scene.update();
-			scene.render();
+			scene.render(renderer);
 		}
 	}
 }

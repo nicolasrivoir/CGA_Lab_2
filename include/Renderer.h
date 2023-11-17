@@ -28,7 +28,7 @@ private:
 
 public:
 
-	Renderer();
+	Renderer(Window& window);
 
 	Renderer(const Renderer&) = delete;
 
