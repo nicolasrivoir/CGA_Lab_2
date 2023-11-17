@@ -9,7 +9,7 @@ Application::Application() : renderer(window)
 
 void Application::mainLoop()
 {
-	auto file = GLTF::loadGLB("data/models/bosque.glb");
+	auto file = GLTF::loadGLB("data/models/cube.glb");
 	Scene scene = GLTF::extractScenes(file)[0];
 
 	bool running = true;
@@ -32,6 +32,8 @@ void Application::mainLoop()
 		if (timer->getDeltaTime() >= 1.0f / framerate) {
 			scene.update();
 			scene.render(renderer);
+			std::cout << timer->getDeltaTime() << std::endl;
+			timer->reset();
 		}
 	}
 }

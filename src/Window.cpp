@@ -11,7 +11,7 @@ Window::Window()
 	window = SDL_CreateWindow("RealTimeRendering",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		600, 600,
+		700, 700,
 		SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 	context = SDL_GL_CreateContext(window);
 
