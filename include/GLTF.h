@@ -1,19 +1,19 @@
-#ifndef FILELOADER_H
-#define FILELOADER_H
+#ifndef GLTF_H
+#define GLTF_H
 
-#include <string>
+#include <string_view>
 #include "utils.h"
 #include "Scene.h"
 #include "MeshObject.h"
 #include "Camera.h"
 
-namespace File
+namespace GLTF
 {
 	using BYTE = unsigned char;
 
 	struct GLTF_t;
 
-	GLTF_t* loadGLB(std::string path);
+	GLTF_t* loadGLB(std::string_view path);
 
 	std::vector<MeshObject> extractMeshes(GLTF_t* file, unsigned int scene_index = 0);
 
@@ -21,23 +21,8 @@ namespace File
 
 	std::vector<Scene> extractScenes(GLTF_t* file);
 
-	const BYTE* loadFile(std::string fname);
-
-	class GLSL {
-
-	private:
-
-		const BYTE* source;
-
-	public:
-
-		GLSL(std::string fname);
-
-		~GLSL();
-
-	};
 
 }
 
-#endif
 
+#endif

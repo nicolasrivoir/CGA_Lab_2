@@ -151,7 +151,8 @@
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Camara.cpp" />
     <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\File.cpp" />
+    <ClCompile Include="src\GLSL.cpp" />
+    <ClCompile Include="src\GLTF.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MeshObject.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
@@ -165,7 +166,8 @@
     <ClInclude Include="include\Application.h" />
     <ClInclude Include="include\Camara.h" />
     <ClInclude Include="include\Camera.h" />
-    <ClInclude Include="include\File.h" />
+    <ClInclude Include="include\GLSL.h" />
+    <ClInclude Include="include\GLTF.h" />
     <ClInclude Include="include\MeshObject.h" />
     <ClInclude Include="include\Renderer.h" />
     <ClInclude Include="include\Scene.h" />

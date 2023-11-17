@@ -2,8 +2,8 @@
 #define RENDERER_H
 
 #include "Window.h"
+#include "ShaderProgram.h"
 #include "utils.h"
-#include "Scene.h"
 #include "MeshObject.h"
 
 #include <memory>
@@ -14,15 +14,13 @@ private:
 
 	Window* window;
 
-	GLuint shaderprogram; // handle for shader program
+	ShaderProgram shaderProgram;
 
 	bool normalInterpolationEnabled;
 
 	bool texturesEnabled;
 
 	bool wireframeEnabled;
-
-	void initShaders(std::string vertexShaderFile, std::string fragmentShaderFile);
 
 	void initObject(MeshObject& obj);
 

@@ -11,10 +11,9 @@ class Application
 
 private:
 
+	Window window; // window has to be declared first, it is used to initialize renderer
+
 	Renderer renderer;
-
-	Window window;
-
 
 public:
 

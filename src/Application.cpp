@@ -1,6 +1,6 @@
 #include "Application.h"
 
-#include "File.h"
+#include "GLTF.h"
 #include "timer.h"
 
 Application::Application() : renderer(window)
@@ -9,8 +9,8 @@ Application::Application() : renderer(window)
 
 void Application::mainLoop()
 {
-	auto file = File::loadGLB("data/models/bosque.glb");
-	Scene scene = File::extractScenes(file)[0];
+	auto file = GLTF::loadGLB("data/models/bosque.glb");
+	Scene scene = GLTF::extractScenes(file)[0];
 
 	bool running = true;
 

@@ -1,13 +1,15 @@
 #ifndef SHADERPROGRAM_H
 #define SHADERPROGRAM_H
 
-#include "File.h"
+#include "GLSL.h"
 
 class ShaderProgram
 {
 public:
 
-	ShaderProgram(File::GLSL vertexShader, File::GLSL fragmentShader);
+	ShaderProgram(GLSL vertexShader, GLSL fragmentShader);
+
+	unsigned int getId();
 
 	//void setAmbientCoefficient(float ka);
 
