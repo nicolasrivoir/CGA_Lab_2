@@ -19,6 +19,12 @@ public:
 
 	void swapBuffers();
 
+	void resize(unsigned int width, unsigned int height);
+
+	unsigned int getWidth();
+
+	unsigned int getHeight();
+
 	~Window();
 
 };

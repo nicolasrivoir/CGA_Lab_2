@@ -3,6 +3,30 @@
 #include "GLTF.h"
 #include "timer.h"
 
+void Application::handleEvent(SDL_Event& e)
+{
+	switch (e.type) {
+	case SDL_QUIT:
+		quit();
+		break;
+	case SDL_WINDOWEVENT:
+		if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+			window.resize(e.window.data1, e.window.data2);
+		}
+		break;
+	//KEYBOARD EVENTS
+	case SDL_KEYDOWN:
+		if (e.key.keysym.sym == SDLK_ESCAPE) {
+			quit();
+		}
+	}
+}
+
+void Application::quit()
+{
+	running = false;
+}
+
 Application::Application() : renderer(window)
 {
 }
@@ -12,10 +36,6 @@ void Application::mainLoop()
 	auto file = GLTF::loadGLB("data/models/cube.glb");
 	Scene scene = GLTF::extractScenes(file)[0];
 
-	bool running = true;
-
-	int framerate = 60;
-
 	Timer* timer = Timer::getInstance();
 	timer->reset();
 
@@ -24,15 +44,12 @@ void Application::mainLoop()
 	while (running) {
 		if (SDL_PollEvent(&sdlEvent))
 		{
-			if (sdlEvent.type == SDL_QUIT) {
-				running = false;
-			}
+			handleEvent(sdlEvent);
 		}
 		timer->tick();
-		if (timer->getDeltaTime() >= 1.0f / framerate) {
+		if (timer->getDeltaTime() >= 1.0f / framerateLimit) {
 			scene.update();
 			scene.render(renderer);
-			std::cout << timer->getDeltaTime() << std::endl;
 			timer->reset();
 		}
 	}

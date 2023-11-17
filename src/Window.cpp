@@ -27,6 +27,25 @@ void Window::swapBuffers()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+void Window::resize(unsigned int width, unsigned int height)
+{
+	glViewport(0, 0, (GLsizei)width, (GLsizei)height);
+}
+
+unsigned int Window::getWidth()
+{
+	int w;
+	SDL_GetWindowSize(window, &w, nullptr);
+	return w;
+}
+
+unsigned int Window::getHeight()
+{
+	int h;
+	SDL_GetWindowSize(window, nullptr, &h);
+	return h;
+}
+
 Window::~Window()
 {
 	SDL_GL_DeleteContext(context);
