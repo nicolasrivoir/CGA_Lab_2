@@ -15,6 +15,14 @@ private:
 
 	Renderer renderer;
 
+	bool running = true;
+
+	int framerateLimit = 60; //fps
+
+	void handleEvent(SDL_Event& e);
+
+	void quit();
+
 public:
 
 	Application();
