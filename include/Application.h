@@ -18,6 +18,8 @@ private:
 
 public:
 
+	Application();
+
 	void mainLoop();
 
 };

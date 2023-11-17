@@ -3,21 +3,18 @@
 
 using namespace math;
 
-Scene::Scene() {
-	renderer = std::make_unique<Renderer>();
-}
 
 void Scene::addObject(MeshObject obj)
 {
 	objects.push_back(obj);
 }
 
-void Scene::render()
+void Scene::render(Renderer &renderer)
 {
 	for (auto& obj : objects) {
-		renderer->draw(obj);
+		renderer.draw(obj);
 	}
-	renderer->clear();
+	renderer.clear();
 }
 
 void Scene::update() {

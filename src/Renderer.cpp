@@ -105,7 +105,7 @@ void Renderer::initObject(MeshObject& obj)
 	
 }
 
-Renderer::Renderer() :window(new Window())
+Renderer::Renderer(Window& window) :window(&window)
 {
 }
 

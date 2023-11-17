@@ -9,15 +9,11 @@ class Scene
 {
 private:
 
-	std::shared_ptr<Renderer> renderer;
-
 	std::vector<MeshObject> objects;
 
 	//cam::Camara camera;
 
 public:
-
-	Scene();
 
 	void addObject(MeshObject obj);
 
@@ -25,7 +21,7 @@ public:
 
 	void update();
 
-	void render();
+	void render(Renderer& renderer);
 
 };
 
