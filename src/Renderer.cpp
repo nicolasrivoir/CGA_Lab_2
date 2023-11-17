@@ -6,57 +6,12 @@
 
 #include "FreeImage.h"
 
-#include "File.h"
+#include "GLSL.h"
 
 using namespace math;
 using namespace geometry;
 
 float r = 0;
-
-void Renderer::initShaders(std::string vertexShaderFile, std::string fragmentShaderFile)
-{
-	// Shader initialization
-	GLuint p, f, v;	// Handles for shader program & vertex and fragment shaders
-
-	v = glCreateShader(GL_VERTEX_SHADER); // Create vertex shader handle
-	f = glCreateShader(GL_FRAGMENT_SHADER);	// " fragment shader handle
-
-	const char* vertSource = (const char*)File::loadFile(vertexShaderFile); // load vertex shader source
-	const char* fragSource = (const char*)File::loadFile(fragmentShaderFile);  // load frag shader source
-
-	// Send the shader source to the GPU
-	// Strings here are null terminated - a non-zero final parameter can be
-	// used to indicate the length of the shader source instead
-	glShaderSource(v, 1, &vertSource, 0);
-	glShaderSource(f, 1, &fragSource, 0);
-
-	GLint compiled, linked; // return values for checking for compile & link errors
-
-	// compile the vertex shader and test for errors
-	glCompileShader(v);
-	glGetShaderiv(v, GL_COMPILE_STATUS, &compiled);
-
-	// compile the fragment shader and test for errors
-	glCompileShader(f);
-	glGetShaderiv(f, GL_COMPILE_STATUS, &compiled);
-
-	p = glCreateProgram(); 	// create the handle for the shader program
-	glAttachShader(p, v); // attach vertex shader to program
-	glAttachShader(p, f); // attach fragment shader to program
-
-	glBindAttribLocation(p, 0, "in_Position"); // bind position attribute to location 0
-	glBindAttribLocation(p, 1, "in_Color"); // bind color attribute to location 1
-
-	glLinkProgram(p); // link the shader program and test for errors
-	glGetProgramiv(p, GL_LINK_STATUS, &linked);
-
-	glUseProgram(p);  // Make the shader program the current active program
-
-	delete[] vertSource; // Don't forget to free allocated memory
-	delete[] fragSource; // We allocated this in the loadFile function...
-
-	shaderprogram = p;
-}
 
 void Renderer::initObject(MeshObject& obj)
 {
@@ -72,8 +27,6 @@ void Renderer::initObject(MeshObject& obj)
 		for (int i = 0; i < 3 * vertexCount; i++) {
 			colors[i] = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		}
-
-		initShaders((char*)"./shaders/simple.vert", (char*)"./shaders/simple.frag"); // Create and start shader program
 
 		GLuint vertexArray;
 		GLuint buffers[3];
@@ -105,7 +58,7 @@ void Renderer::initObject(MeshObject& obj)
 	
 }
 
-Renderer::Renderer(Window& window) :window(&window)
+Renderer::Renderer(Window& window) :window(&window), shaderProgram(GLSL("./shaders/simple.vert"), GLSL("./shaders/simple.frag"))
 {
 }
 
@@ -156,13 +109,13 @@ void Renderer::draw(MeshObject& obj) {
 		glm::mat4 model = reinterpret_cast<glm::mat4&>(obj.transformation);
 
 		// pass model as uniform into shader
-		int projectionIndex = glGetUniformLocation(shaderprogram, "projection");
+		int projectionIndex = glGetUniformLocation(shaderProgram.getId(), "projection");
 		glUniformMatrix4fv(projectionIndex, 1, GL_FALSE, glm::value_ptr(projection));
 		// pass model as uniform into shader
-		int viewIndex = glGetUniformLocation(shaderprogram, "view");
+		int viewIndex = glGetUniformLocation(shaderProgram.getId(), "view");
 		glUniformMatrix4fv(viewIndex, 1, GL_FALSE, glm::value_ptr(view));
 		// pass model as uniform into shader
-		int modelIndex = glGetUniformLocation(shaderprogram, "model");
+		int modelIndex = glGetUniformLocation(shaderProgram.getId(), "model");
 		glUniformMatrix4fv(modelIndex, 1, GL_FALSE, glm::value_ptr(model));
 
 		unsigned int count = 3* obj.meshes[i]->indices.size();

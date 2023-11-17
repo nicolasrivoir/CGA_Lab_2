@@ -1,4 +1,5 @@
 #include "Window.h"
+#include <exception>
 
 Window::Window()
 {
@@ -6,6 +7,7 @@ Window::Window()
 		SDL_Log("Failed to initialize SDL: %s", SDL_GetError());
 		return;
 	}
+	
 	window = SDL_CreateWindow("RealTimeRendering",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
@@ -13,9 +15,9 @@ Window::Window()
 		SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 	context = SDL_GL_CreateContext(window);
 
-	SDL_GL_SetSwapInterval(0);
 	gladLoadGLLoader(SDL_GL_GetProcAddress);
 
+	SDL_GL_SetSwapInterval(0);
 	glClearColor(0.8f, 0.9f, 1.0f, 1.0f);
 }
 

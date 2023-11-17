@@ -11,10 +11,10 @@
 #include <iostream>
 #include <fstream>
 
-#include "File.h"
+#include "GLTF.h"
 #include "MeshObject.h"
 
-using namespace File;
+using namespace GLTF;
 using namespace math;
 
 using BYTE = unsigned char;
@@ -32,18 +32,18 @@ std::vector<T> extract_from_accessor(const tinygltf::Model& model, const tinyglt
 }
 
 
-struct File::GLTF_t {
+struct GLTF::GLTF_t {
 	tinygltf::Model model;
 };
 
-GLTF_t* File::loadGLB(std::string path)
+GLTF_t* GLTF::loadGLB(std::string_view path)
 {
 	tinygltf::Model m_model;
 	tinygltf::TinyGLTF loader;
 	std::string err;
 	std::string warn;
 
-	bool ret = loader.LoadBinaryFromFile(&m_model, &err, &warn, path); // for binary glTF(.glb)
+	bool ret = loader.LoadBinaryFromFile(&m_model, &err, &warn, path.data()); // for binary glTF(.glb)
 
 	if (!warn.empty()) {
 		printf("Warning: %s\n", warn.c_str());
@@ -61,7 +61,7 @@ GLTF_t* File::loadGLB(std::string path)
 	return new GLTF_t{ m_model };
 }
 
-std::vector<MeshObject> File::extractMeshes(GLTF_t* file, unsigned int scene_index)
+std::vector<MeshObject> GLTF::extractMeshes(GLTF_t* file, unsigned int scene_index)
 {
 	std::vector<MeshObject> objects;
 
@@ -172,7 +172,7 @@ std::vector<MeshObject> File::extractMeshes(GLTF_t* file, unsigned int scene_ind
 	return objects;
 }
 
-std::vector<CamConstructorData> File::extractCameras(GLTF_t* file, unsigned int scene_index)
+std::vector<CamConstructorData> GLTF::extractCameras(GLTF_t* file, unsigned int scene_index)
 {
 	std::vector<CamConstructorData> cameras;
 
@@ -229,7 +229,7 @@ std::vector<CamConstructorData> File::extractCameras(GLTF_t* file, unsigned int 
 	return cameras;
 }
 
-std::vector<Scene> File::extractScenes(GLTF_t* file)
+std::vector<Scene> GLTF::extractScenes(GLTF_t* file)
 {
 	std::vector<Scene> scenes;
 
@@ -244,43 +244,4 @@ std::vector<Scene> File::extractScenes(GLTF_t* file)
 	}
 
 	return scenes;
-}
-
-const BYTE* File::loadFile(std::string fname)
-{
-	int size;
-	char* memblock = NULL;
-
-	// file read based on example in cplusplus.com tutorial
-	// ios::ate opens file at the end
-	std::ifstream file(fname, std::ios::in | std::ios::binary | std::ios::ate);
-	if (file.is_open())
-	{
-		size = (int)file.tellg(); // get location of file pointer i.e. file size
-		memblock = new char[size + 1]; // create buffer with space for null char
-		file.seekg(0, std::ios::beg);
-		file.read(memblock, size);
-		file.close();
-		memblock[size] = 0;
-		std::cout << "file " << fname << " loaded" << std::endl;
-	}
-	else
-	{
-		std::cout << "Unable to open file " << fname << std::endl;
-		// should ideally set a flag or use exception handling
-		// so that calling function can decide what to do now
-	}
-	return reinterpret_cast<BYTE*>(memblock);
-}
-
-/* GLSL */
-
-File::GLSL::GLSL(std::string fname)
-{
-	source = loadFile(fname);
-}
-
-File::GLSL::~GLSL()
-{
-	delete source;
 }
