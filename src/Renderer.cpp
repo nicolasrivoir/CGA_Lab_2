@@ -21,13 +21,6 @@ void Renderer::initObject(MeshObject& obj)
 		const size_t vertexCount = mesh.positions.size();
 		const size_t faceCount = mesh.indices.size();
 
-		
-
-		GLfloat* colors = new GLfloat[3 * vertexCount];
-		for (int i = 0; i < 3 * vertexCount; i++) {
-			colors[i] = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-		}
-
 		GLuint vertexArray;
 		GLuint buffers[3];
 		glGenVertexArrays(1, &vertexArray); // allocate & assign a Vertex Array Object (VAO)
@@ -40,15 +33,17 @@ void Renderer::initObject(MeshObject& obj)
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		glEnableVertexAttribArray(0);     // Enable attribute index 0 (position)
 
+
+		GLfloat* normals = reinterpret_cast<GLfloat*>(mesh.normals.data());
+		glBindBuffer(GL_ARRAY_BUFFER, buffers[1]); // bind second VBO as active buffer object
+		glBufferData(GL_ARRAY_BUFFER, 3 * vertexCount * sizeof(GLfloat), normals, GL_STATIC_DRAW);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(1);    // Enable attribute index 1 (normal)
+
 		GLfloat* indices = reinterpret_cast<GLfloat*>(mesh.indices.data());
 		const unsigned int indexCount = mesh.indices.size();
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]); // bind second VBO as active buffer object
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]); // bind second VBO as active buffer object
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(GLuint), indices, GL_STATIC_DRAW);
-
-		glBindBuffer(GL_ARRAY_BUFFER, buffers[2]); // bind second VBO as active buffer object
-		glBufferData(GL_ARRAY_BUFFER, 3 * vertexCount * sizeof(GLfloat), colors, GL_STATIC_DRAW);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		glEnableVertexAttribArray(1);    // Enable attribute index 1 (color)
 
 		glEnable(GL_DEPTH_TEST); // enable depth testing
 		//glEnable(GL_CULL_FACE); // enable back face culling - try this and see what happens!
@@ -107,6 +102,7 @@ void Renderer::draw(MeshObject& obj) {
 		r += 0.03; //for camera rotation
 		glm::mat4 view(1.0);
 		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -4.0f));
+		view = glm::rotate(view, 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
 		view = glm::rotate(view, r, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		// Create model matrix for model transformations
@@ -121,6 +117,21 @@ void Renderer::draw(MeshObject& obj) {
 		// pass model as uniform into shader
 		int modelIndex = glGetUniformLocation(shaderProgram.getId(), "model");
 		glUniformMatrix4fv(modelIndex, 1, GL_FALSE, glm::value_ptr(model));
+
+		int objectColorIndex = glGetUniformLocation(shaderProgram.getId(), "objectColor");
+		auto& color = obj.materials[0].basecolor;
+		glUniform3fv(objectColorIndex, 1, &color.x);
+
+		int lightPosIndex = glGetUniformLocation(shaderProgram.getId(), "lightPosition");
+		auto lightPos = view * glm::vec4(2.0f, 2.0f, 2.0f, 1.0f);
+		glUniform3fv(lightPosIndex, 1, &lightPos.x);
+
+		int lightColIndex = glGetUniformLocation(shaderProgram.getId(), "lightColor");
+		auto lightCol = Vector3(1.0f, 1.0f, 1.0f);;
+		glUniform3fv(lightColIndex, 1, &lightCol.x);
+
+		int specStrengthIndex = glGetUniformLocation(shaderProgram.getId(), "specularStrength");
+		glUniform1f(specStrengthIndex, 0.5f);
 
 		unsigned int count = 3* obj.meshes[i]->indices.size();
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, reinterpret_cast<void*>(0)); // draw the mesh
