@@ -32,9 +32,6 @@ ShaderProgram::ShaderProgram(GLSL vertexShader, GLSL fragmentShader)
 	glAttachShader(p, v); // attach vertex shader to program
 	glAttachShader(p, f); // attach fragment shader to program
 
-	glBindAttribLocation(p, 0, "in_Position"); // bind position attribute to location 0
-	glBindAttribLocation(p, 1, "in_Color"); // bind color attribute to location 1
-
 	glLinkProgram(p); // link the shader program and test for errors
 	glGetProgramiv(p, GL_LINK_STATUS, &linked);
 

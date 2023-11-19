@@ -1,16 +1,20 @@
 #version 400 core
+
 uniform mat4 projection;
 uniform mat4 view;
 uniform mat4 model;
 
+layout(location = 0) in vec3 inPosition;
+layout(location = 1) in vec3 inNormal;
 
-layout (location = 0) in vec3 in_Position;
-layout (location = 1) in vec3 in_Color;
+out vec3 fragPos;
+out vec3 fragNormal;
 
-out vec3 vertex_color;
-
-void main(void){
-    mat4 MVP = projection * view* model;
-	gl_Position = MVP * vec4(in_Position,1.0);
-	vertex_color = in_Color;
+void main(void) {
+    fragPos = vec3(view * model * vec4(inPosition, 1.0));
+    
+    mat3 normalMatrix = transpose(inverse(mat3(view * model)));
+    fragNormal = normalize(normalMatrix * inNormal);
+    
+    gl_Position = projection * view * model * vec4(inPosition, 1.0);
 }
