@@ -3,8 +3,14 @@
 #include "GLTF.h"
 #include "timer.h"
 
+#include <Windows.h>
+#include "imgui.h"
+#include "backends/imgui_impl_sdl2.h"
+#include "backends/imgui_impl_opengl3.h"
+
 void Application::handleEvent(SDL_Event& e)
 {
+	ImGui_ImplSDL2_ProcessEvent(&e);
 	switch (e.type) {
 	case SDL_QUIT:
 		quit();
@@ -27,7 +33,7 @@ void Application::quit()
 	running = false;
 }
 
-Application::Application() : renderer(window)
+Application::Application() : renderer(window), gui(window)
 {
 }
 
@@ -50,7 +56,10 @@ void Application::mainLoop()
 		if (timer->getDeltaTime() >= 1.0f / framerateLimit) {
 			scene.update();
 			scene.render(renderer);
+			gui.draw();
+			renderer.clear();
 			timer->reset();
+			Sleep(8);
 		}
 	}
 }

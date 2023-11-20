@@ -13,8 +13,26 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Third party">
+    <Filter Include="Libraries">
       <UniqueIdentifier>{3f7605a9-a891-4938-b509-046c7a5330ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libraries\glad">
+      <UniqueIdentifier>{e8058e05-5a47-4cec-8fbd-85c53a7502e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libraries\ImGui">
+      <UniqueIdentifier>{37f22cd9-cafe-45fa-8ed2-f762c7621ede}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libraries\ImGui\backends">
+      <UniqueIdentifier>{ed892716-954e-4d68-ad5f-f312e18e005a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libraries\ImGui\misc">
+      <UniqueIdentifier>{36aab4da-0ae8-40b7-bdca-6e2344340299}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libraries\ImGui\misc\debuggers">
+      <UniqueIdentifier>{f9317045-cc01-4dbc-be97-30b55b1b798a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libraries\ImGui\misc\cpp">
+      <UniqueIdentifier>{d345cd6d-7f09-48c8-a3ac-33fdd6981775}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -42,9 +60,6 @@
     <ClCompile Include="src\MeshObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="lib\glad\glad\glad.c">
-      <Filter>Source Files\Third party</Filter>
-    </ClCompile>
     <ClCompile Include="src\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -59,6 +74,36 @@
     </ClCompile>
     <ClCompile Include="src\GLSL.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\glad\glad\glad.c">
+      <Filter>Libraries\glad</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\imgui\imgui.cpp">
+      <Filter>Libraries\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\imgui\imgui_demo.cpp">
+      <Filter>Libraries\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\imgui\imgui_draw.cpp">
+      <Filter>Libraries\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\imgui\imgui_tables.cpp">
+      <Filter>Libraries\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\imgui\imgui_widgets.cpp">
+      <Filter>Libraries\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\imgui\backends\imgui_impl_sdl2.cpp">
+      <Filter>Libraries\ImGui\backends</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\imgui\misc\cpp\imgui_stdlib.cpp">
+      <Filter>Libraries\ImGui\misc\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\imgui\backends\imgui_impl_opengl3.cpp">
+      <Filter>Libraries\ImGui\backends</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -104,5 +149,45 @@
     <ClInclude Include="include\GLSL.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\GUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\imgui\imconfig.h">
+      <Filter>Libraries\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\imgui\imgui.h">
+      <Filter>Libraries\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\imgui\imgui_internal.h">
+      <Filter>Libraries\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\imgui\imstb_rectpack.h">
+      <Filter>Libraries\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\imgui\imstb_textedit.h">
+      <Filter>Libraries\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\imgui\imstb_truetype.h">
+      <Filter>Libraries\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\imgui\backends\imgui_impl_sdl2.h">
+      <Filter>Libraries\ImGui\backends</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\imgui\misc\cpp\imgui_stdlib.h">
+      <Filter>Libraries\ImGui\misc\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\imgui\backends\imgui_impl_opengl3.h">
+      <Filter>Libraries\ImGui\backends</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="lib\imgui\misc\debuggers\imgui.natstepfilter">
+      <Filter>Libraries\ImGui\misc\debuggers</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="lib\imgui\misc\debuggers\imgui.natvis">
+      <Filter>Libraries\ImGui\misc\debuggers</Filter>
+    </Natvis>
   </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@ uniform vec3 objectColor;
 uniform vec3 lightPosition;
 uniform vec3 lightColor;
 uniform float specularStrength;
+uniform float gamma;
 
 in vec3 fragPos;
 in vec3 fragNormal;
@@ -12,7 +13,7 @@ layout(location = 0) out vec4 fragColor;
 
 void main(void) {
     // Ambient light
-    float ambientStrength = 0.3;
+    float ambientStrength = 0.5;
     vec3 ambient = ambientStrength * objectColor;
 
     // Diffuse reflection
@@ -29,5 +30,9 @@ void main(void) {
 
     // Phong reflection (combine previous components)
     vec3 result = (ambient + diffuse + specular) * objectColor;
+	
+	// Gamma correction (linear to sRGB)
+	result = pow(result, vec3(1.0/gamma));
+	
     fragColor = vec4(result, 1.0);
 }

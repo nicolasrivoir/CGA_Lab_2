@@ -3,6 +3,7 @@
 
 #include "Window.h"
 #include "Renderer.h"
+#include "GUI.h"
 
 #include <memory>
 
@@ -11,9 +12,11 @@ class Application
 
 private:
 
-	Window window; // window has to be declared first, it is used to initialize renderer
+	Window window; // window has to be declared first, it is used to initialize renderer and GUI
 
 	Renderer renderer;
+
+	GUI gui;
 
 	bool running = true;
 

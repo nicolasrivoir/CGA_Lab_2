@@ -5,6 +5,13 @@
 
 class ShaderProgram
 {
+
+private:
+
+	unsigned int id;
+
+	float gamma;
+
 public:
 
 	ShaderProgram(GLSL vertexShader, GLSL fragmentShader);
@@ -14,10 +21,6 @@ public:
 	//void setAmbientCoefficient(float ka);
 
 	~ShaderProgram();
-
-private:
-
-	unsigned int id;
 
 };
 
