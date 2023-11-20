@@ -1,5 +1,8 @@
 #include "Window.h"
-#include <exception>
+
+#include "imgui.h"
+#include "backends/imgui_impl_sdl2.h"
+#include "backends/imgui_impl_opengl3.h"
 
 Window::Window()
 {
@@ -19,6 +22,14 @@ Window::Window()
 
 	SDL_GL_SetSwapInterval(0);
 	glClearColor(0.8f, 0.9f, 1.0f, 1.0f);
+
+	ImGui::CreateContext();
+	ImGui_ImplSDL2_InitForOpenGL(window, context);
+	ImGui_ImplOpenGL3_Init("#version 400");
+
+	ImGuiIO& io = ImGui::GetIO();
+	io.IniFilename = "./data/gui/imgui.ini";
+
 }
 
 void Window::swapBuffers()
@@ -48,6 +59,10 @@ unsigned int Window::getHeight()
 
 Window::~Window()
 {
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
+
 	SDL_GL_DeleteContext(context);
 	SDL_DestroyWindow(window);
 	SDL_Quit();

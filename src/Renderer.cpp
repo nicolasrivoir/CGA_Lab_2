@@ -53,7 +53,7 @@ void Renderer::initObject(MeshObject& obj)
 	
 }
 
-Renderer::Renderer(Window& window) :window(&window), shaderProgram(GLSL("./shaders/simple.vert"), GLSL("./shaders/simple.frag"))
+Renderer::Renderer(Window& window) : window(&window), shaderProgram(GLSL("./shaders/simple.vert"), GLSL("./shaders/simple.frag"))
 {
 }
 
@@ -99,7 +99,7 @@ void Renderer::draw(MeshObject& obj) {
 		glm::mat4 projection = glm::perspective(45.0f, aspect, 1.0f, 100.f);
 
 		// Create view matrix for the camera
-		r += 0.03; //for camera rotation
+		//r += 0.03; //for camera rotation
 		glm::mat4 view(1.0);
 		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -4.0f));
 		view = glm::rotate(view, 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -132,6 +132,9 @@ void Renderer::draw(MeshObject& obj) {
 
 		int specStrengthIndex = glGetUniformLocation(shaderProgram.getId(), "specularStrength");
 		glUniform1f(specStrengthIndex, 0.5f);
+
+		int gammaIndex = glGetUniformLocation(shaderProgram.getId(), "gamma");
+		glUniform1f(gammaIndex, 2.2f);
 
 		unsigned int count = 3* obj.meshes[i]->indices.size();
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, reinterpret_cast<void*>(0)); // draw the mesh
