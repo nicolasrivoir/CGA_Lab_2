@@ -9,13 +9,15 @@ class Scene
 {
 private:
 
+	friend class Application;
+
 	std::vector<MeshObject> objects;
 
 	//cam::Camara camera;
 
 public:
 
-	void addObject(MeshObject obj);
+	void addObject(MeshObject &obj);
 
 	//void setCamera(cam::Camara cam);
 

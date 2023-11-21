@@ -3,7 +3,10 @@
 uniform vec3 objectColor;
 uniform vec3 lightPosition;
 uniform vec3 lightColor;
-uniform float specularStrength;
+uniform float diffuseCoefficient;
+uniform float specularCoefficient;
+uniform float specularExponent;
+uniform float metalnessFactor;
 uniform float gamma;
 
 in vec3 fragPos;
@@ -20,16 +23,16 @@ void main(void) {
     vec3 norm = normalize(fragNormal);
     vec3 lightDir = normalize(lightPosition - fragPos);
     float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = diff * lightColor;
+    vec3 diffuse = diffuseCoefficient * diff * lightColor;
 
     // Specular reflection
     vec3 viewDir = normalize(-fragPos);
     vec3 reflectDir = reflect(-lightDir, norm);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 8);
-    vec3 specular = specularStrength * spec * lightColor;
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), specularExponent);
+    vec3 specular = specularCoefficient * spec * mix(lightColor, objectColor, metalnessFactor);
 
     // Phong reflection (combine previous components)
-    vec3 result = (ambient + diffuse + specular) * objectColor;
+    vec3 result = (ambient + diffuse) * objectColor + specular;
 	
 	// Gamma correction (linear to sRGB)
 	result = pow(result, vec3(1.0/gamma));

@@ -10,6 +10,7 @@ class MeshObject
 private:
 
 	friend class Renderer;
+	friend class GUI;
 
 	math::Matrix<4, 4> transformation;
 

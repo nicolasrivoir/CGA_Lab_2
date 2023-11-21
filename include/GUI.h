@@ -2,6 +2,8 @@
 #define GUI_H
 
 #include "Window.h"
+#include "ShaderProgram.h"
+#include "MeshObject.h"
 
 class GUI
 {
@@ -13,7 +15,7 @@ public:
 
 	GUI(Window& window);
 
-	void draw();
+	void shaderPreview(ShaderProgram s, MeshObject &obj);
 
 };
 
