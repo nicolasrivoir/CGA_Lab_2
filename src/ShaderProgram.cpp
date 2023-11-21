@@ -1,6 +1,8 @@
 #include "ShaderProgram.h"
 #include "Window.h"
 
+#include <algorithm>
+
 ShaderProgram::ShaderProgram(GLSL vertexShader, GLSL fragmentShader)
 {
 	// Shader initialization
@@ -43,6 +45,44 @@ ShaderProgram::ShaderProgram(GLSL vertexShader, GLSL fragmentShader)
 unsigned int ShaderProgram::getId()
 {
 	return id;
+}
+
+float ShaderProgram::getGamma()
+{
+	return gamma;
+}
+
+Material ShaderProgram::getCurrentMaterial()
+{
+	return currentMaterial;
+}
+
+void ShaderProgram::setCurrentMaterial(const Material& material)
+{
+	int colorIndex = glGetUniformLocation(id, "objectColor");
+	glUniform3fv(colorIndex, 1, &material.basecolor.x);
+
+	int kdIndex = glGetUniformLocation(id, "diffuseCoefficient");
+	float kd = 1.1f - material.metallic;
+	glUniform1f(kdIndex, kd);
+
+	int ksIndex = glGetUniformLocation(id, "specularCoefficient");
+	glUniform1f(ksIndex, 1 - material.roughness);
+
+	int nIndex = glGetUniformLocation(id, "specularExponent");
+	glUniform1f(nIndex, 2.0 + (1 - material.roughness) * 128.0);
+
+	int metalIndex = glGetUniformLocation(id, "metalnessFactor");
+	glUniform1f(metalIndex, material.metallic);
+
+	currentMaterial = material;
+}
+
+void ShaderProgram::setGamma(float value)
+{
+	int index = glGetUniformLocation(id, "gamma");
+	glUniform1f(index, value);
+	gamma = value;
 }
 
 ShaderProgram::~ShaderProgram()

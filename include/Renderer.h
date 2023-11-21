@@ -32,6 +32,8 @@ public:
 
 	Renderer operator=(const Renderer&) = delete;
 
+	ShaderProgram getShaderProgram();
+
 	void toogleNormalInterpolation();
 
 	void toggleTextures();

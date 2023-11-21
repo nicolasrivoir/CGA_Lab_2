@@ -4,7 +4,7 @@
 using namespace math;
 
 
-void Scene::addObject(MeshObject obj)
+void Scene::addObject(MeshObject &obj)
 {
 	objects.push_back(obj);
 }

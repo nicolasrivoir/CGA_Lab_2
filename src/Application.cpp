@@ -56,7 +56,7 @@ void Application::mainLoop()
 		if (timer->getDeltaTime() >= 1.0f / framerateLimit) {
 			scene.update();
 			scene.render(renderer);
-			gui.draw();
+			gui.shaderPreview(renderer.getShaderProgram(), scene.objects[0]);
 			renderer.clear();
 			timer->reset();
 			Sleep(8);

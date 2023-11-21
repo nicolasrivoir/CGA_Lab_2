@@ -55,8 +55,14 @@ void Renderer::initObject(MeshObject& obj)
 
 Renderer::Renderer(Window& window) : window(&window), shaderProgram(GLSL("./shaders/simple.vert"), GLSL("./shaders/simple.frag"))
 {
+	shaderProgram.setGamma(2.2f);
 }
 
+
+ShaderProgram Renderer::getShaderProgram()
+{
+	return shaderProgram;
+}
 
 void Renderer::toogleNormalInterpolation()
 {
@@ -118,9 +124,7 @@ void Renderer::draw(MeshObject& obj) {
 		int modelIndex = glGetUniformLocation(shaderProgram.getId(), "model");
 		glUniformMatrix4fv(modelIndex, 1, GL_FALSE, glm::value_ptr(model));
 
-		int objectColorIndex = glGetUniformLocation(shaderProgram.getId(), "objectColor");
-		auto& color = obj.materials[0].basecolor;
-		glUniform3fv(objectColorIndex, 1, &color.x);
+		shaderProgram.setCurrentMaterial(obj.materials[i]);
 
 		int lightPosIndex = glGetUniformLocation(shaderProgram.getId(), "lightPosition");
 		auto lightPos = view * glm::vec4(2.0f, 2.0f, 2.0f, 1.0f);
@@ -129,12 +133,6 @@ void Renderer::draw(MeshObject& obj) {
 		int lightColIndex = glGetUniformLocation(shaderProgram.getId(), "lightColor");
 		auto lightCol = Vector3(1.0f, 1.0f, 1.0f);;
 		glUniform3fv(lightColIndex, 1, &lightCol.x);
-
-		int specStrengthIndex = glGetUniformLocation(shaderProgram.getId(), "specularStrength");
-		glUniform1f(specStrengthIndex, 0.5f);
-
-		int gammaIndex = glGetUniformLocation(shaderProgram.getId(), "gamma");
-		glUniform1f(gammaIndex, 2.2f);
 
 		unsigned int count = 3* obj.meshes[i]->indices.size();
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, reinterpret_cast<void*>(0)); // draw the mesh
