@@ -199,6 +199,7 @@ struct Material {
 	float roughness = 0.4f;
 	float transmission = 0.0f;
 	Texture diffuseTexture;
+	Texture normalTexture;
 	//bool double_sided;
 };
 

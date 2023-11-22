@@ -75,11 +75,18 @@ void ShaderProgram::setCurrentMaterial(const Material& material)
 	int metalIndex = glGetUniformLocation(id, "metalnessFactor");
 	glUniform1f(metalIndex, material.metallic);
 
-	int texEnabledIndex = glGetUniformLocation(id, "texturesEnabled");
-	glUniform1i(texEnabledIndex, material.diffuseTexture.empty() ? 0 : 1);
+	int diffTexEnabledIndex = glGetUniformLocation(id, "diffTexEnabled");
+	glUniform1i(diffTexEnabledIndex, material.diffuseTexture.isEnabled() ? 1 : 0); // GLSL takes int instead of bool
 
-	int diffTexIndex = glGetUniformLocation(id, "diffuseTexture");
-	material.diffuseTexture.bind();
+	material.diffuseTexture.bind(0);
+	glUniform1i(glGetUniformLocation(id, "diffuseTexture"), 0);
+
+	int normTexEnabledIndex = glGetUniformLocation(id, "normTexEnabled");
+	glUniform1i(normTexEnabledIndex, material.normalTexture.isEnabled() ? 1 : 0); // GLSL takes int instead of bool
+
+	material.normalTexture.bind(1);
+	glUniform1i(glGetUniformLocation(id, "normalTexture"),1);
+	
 
 	currentMaterial = material;
 }

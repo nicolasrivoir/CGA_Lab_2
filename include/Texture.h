@@ -16,15 +16,21 @@ private:
 
 	unsigned int id;
 
+	bool enabled = false;
+
 public:
 
 	Texture() = default;
 
 	Texture(std::vector<BYTE> data, unsigned int width, unsigned int height);
 
-	void bind() const;
+	void bind(unsigned int slot) const;
 
-	bool empty() const;
+	bool isEnabled() const;
+
+	void enable();
+
+	void disable();
 
 };
 

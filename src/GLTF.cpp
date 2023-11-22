@@ -155,6 +155,8 @@ std::vector<MeshObject> GLTF::extractMeshes(GLTF_t* file, unsigned int scene_ind
 					new_material.emission.y = mat.emissiveFactor[1];
 					new_material.emission.z = mat.emissiveFactor[2];
 
+					new_material.diffuseTexture = Texture();
+
 					auto transmission_extension = mat.extensions.find("KHR_materials_transmission");
 					if (transmission_extension != mat.extensions.end()) {
 						auto transmission_object = transmission_extension->second.Get("transmissionFactor");
@@ -167,6 +169,16 @@ std::vector<MeshObject> GLTF::extractMeshes(GLTF_t* file, unsigned int scene_ind
 						auto& img_diff = file->model.images[tex_diff.source];
 						Texture new_diff_tex(img_diff.image, img_diff.width, img_diff.height);
 						new_material.diffuseTexture = new_diff_tex;
+					}
+
+					new_material.normalTexture = Texture();
+
+					const int tex_norm_index = mat.normalTexture.index;
+					if (tex_norm_index >= 0) {
+						auto& tex_norm = file->model.textures[tex_norm_index];
+						auto& img_norm = file->model.images[tex_norm.source];
+						Texture new_norm_tex(img_norm.image, img_norm.width, img_norm.height);
+						new_material.normalTexture = new_norm_tex;
 					}
 
 				}

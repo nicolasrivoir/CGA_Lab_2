@@ -132,7 +132,8 @@ void Renderer::draw(MeshObject& obj) {
 
 		shaderProgram.setCurrentMaterial(obj.materials[i]);
 
-		obj.materials[i].diffuseTexture.bind();
+		obj.materials[i].diffuseTexture.bind(0);
+		obj.materials[i].normalTexture.bind(1);
 
 		int lightPosIndex = glGetUniformLocation(shaderProgram.getId(), "lightPosition");
 		auto lightPos = view * glm::vec4(2.0f, 2.0f, 2.0f, 1.0f);
@@ -144,6 +145,7 @@ void Renderer::draw(MeshObject& obj) {
 
 		unsigned int count = 3* obj.meshes[i]->indices.size();
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, reinterpret_cast<void*>(0)); // draw the mesh
+
 	}
 	
 }
