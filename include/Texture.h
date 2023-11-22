@@ -1,13 +1,31 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-using BYTE = unsigned char;
+#include <vector>
+#include <memory>
 
-struct Texture {
-	const unsigned int id;
-	const BYTE* data;
-	const unsigned int width;
-	const unsigned int height;
+enum class ImageFormat {
+	PNG, JPEG
+};
+
+class Texture {
+
+	using BYTE = unsigned char;
+
+private:
+
+	unsigned int id;
+
+public:
+
+	Texture() = default;
+
+	Texture(std::vector<BYTE> data, unsigned int width, unsigned int height);
+
+	void bind() const;
+
+	bool empty() const;
+
 };
 
 #endif

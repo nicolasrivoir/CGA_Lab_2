@@ -122,7 +122,7 @@ std::vector<MeshObject> GLTF::extractMeshes(GLTF_t* file, unsigned int scene_ind
 					new_mesh.normals = extract_from_accessor<math::Vector3>(file->model, normals_accessor);
 				}
 
-				const int texcoords_index = primitive.attributes["TEXCOORD"];
+				const int texcoords_index = primitive.attributes["TEXCOORD_0"];
 				if (texcoords_index >= 0) {
 					const tinygltf::Accessor& texcoords_accessor = file->model.accessors[texcoords_index];
 					new_mesh.texcoords = extract_from_accessor<math::Vector2>(file->model, texcoords_accessor);
@@ -161,11 +161,19 @@ std::vector<MeshObject> GLTF::extractMeshes(GLTF_t* file, unsigned int scene_ind
 						new_material.transmission = transmission_object.GetNumberAsDouble();
 					}
 
+					const int tex_diff_index = mat.pbrMetallicRoughness.baseColorTexture.index;
+					if (tex_diff_index >= 0) {
+						auto& tex_diff = file->model.textures[tex_diff_index];
+						auto& img_diff = file->model.images[tex_diff.source];
+						Texture new_diff_tex(img_diff.image, img_diff.width, img_diff.height);
+						new_material.diffuseTexture = new_diff_tex;
+					}
+
 				}
 
 				mesh_object.addSubMesh(new_mesh, new_material);
 			}
-			objects.push_back(mesh_object);
+			objects.push_back(mesh_object);	
 		}
 	}
 

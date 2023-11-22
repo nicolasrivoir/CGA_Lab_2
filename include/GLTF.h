@@ -5,6 +5,7 @@
 #include "utils.h"
 #include "Scene.h"
 #include "MeshObject.h"
+#include "Texture.h"
 #include "Camera.h"
 
 namespace GLTF
@@ -20,7 +21,6 @@ namespace GLTF
 	std::vector<CamConstructorData> extractCameras(GLTF_t* file, unsigned int scene_index = 0);
 
 	std::vector<Scene> extractScenes(GLTF_t* file);
-
 
 }
 

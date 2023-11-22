@@ -2,7 +2,9 @@
 
 using namespace math;
 
-MeshObject::MeshObject(math::Matrix<4, 4> transformation) : transformation(transformation) {}
+MeshObject::MeshObject(math::Matrix<4, 4> transformation) : transformation(math::identity<4>()) {
+	transform(transformation);
+}
 
 void MeshObject::addSubMesh(geometry::Mesh &mesh, Material mat)
 {

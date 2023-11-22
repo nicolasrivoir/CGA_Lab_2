@@ -1,6 +1,8 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include "Texture.h"
+
 #include <cstddef>
 #include <vector>
 #include <cmath>
@@ -196,6 +198,7 @@ struct Material {
 	float metallic = 0.0f;
 	float roughness = 0.4f;
 	float transmission = 0.0f;
+	Texture diffuseTexture;
 	//bool double_sided;
 };
 

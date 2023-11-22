@@ -22,10 +22,10 @@ void Renderer::initObject(MeshObject& obj)
 		const size_t faceCount = mesh.indices.size();
 
 		GLuint vertexArray;
-		GLuint buffers[3];
+		GLuint buffers[4];
 		glGenVertexArrays(1, &vertexArray); // allocate & assign a Vertex Array Object (VAO)
 		glBindVertexArray(vertexArray); // bind VAO as current object
-		glGenBuffers(3, buffers); // allocate two Vertex Buffer Objects (VBO)
+		glGenBuffers(4, buffers); // allocate the Vertex Buffer Objects (VBO)
 
 		GLfloat* positions = reinterpret_cast<GLfloat*>(mesh.positions.data());
 		glBindBuffer(GL_ARRAY_BUFFER, buffers[0]); // bind first VBO as active buffer object
@@ -40,9 +40,15 @@ void Renderer::initObject(MeshObject& obj)
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		glEnableVertexAttribArray(1);    // Enable attribute index 1 (normal)
 
+		GLfloat* texcoords = reinterpret_cast<GLfloat*>(mesh.texcoords.data());
+		glBindBuffer(GL_ARRAY_BUFFER, buffers[2]); // bind second VBO as active buffer object
+		glBufferData(GL_ARRAY_BUFFER, 2 * vertexCount * sizeof(GLfloat), texcoords, GL_STATIC_DRAW);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(2);    // Enable attribute index 2 (texcoords)
+
 		GLfloat* indices = reinterpret_cast<GLfloat*>(mesh.indices.data());
 		const unsigned int indexCount = mesh.indices.size();
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]); // bind second VBO as active buffer object
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]); // bind second VBO as active buffer object
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(GLuint), indices, GL_STATIC_DRAW);
 
 		glEnable(GL_DEPTH_TEST); // enable depth testing
@@ -125,6 +131,8 @@ void Renderer::draw(MeshObject& obj) {
 		glUniformMatrix4fv(modelIndex, 1, GL_FALSE, glm::value_ptr(model));
 
 		shaderProgram.setCurrentMaterial(obj.materials[i]);
+
+		obj.materials[i].diffuseTexture.bind();
 
 		int lightPosIndex = glGetUniformLocation(shaderProgram.getId(), "lightPosition");
 		auto lightPos = view * glm::vec4(2.0f, 2.0f, 2.0f, 1.0f);
