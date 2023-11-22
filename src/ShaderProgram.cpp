@@ -59,7 +59,7 @@ Material ShaderProgram::getCurrentMaterial()
 
 void ShaderProgram::setCurrentMaterial(const Material& material)
 {
-	int colorIndex = glGetUniformLocation(id, "objectColor");
+	int colorIndex = glGetUniformLocation(id, "baseColor");
 	glUniform3fv(colorIndex, 1, &material.basecolor.x);
 
 	int kdIndex = glGetUniformLocation(id, "diffuseCoefficient");
@@ -74,6 +74,12 @@ void ShaderProgram::setCurrentMaterial(const Material& material)
 
 	int metalIndex = glGetUniformLocation(id, "metalnessFactor");
 	glUniform1f(metalIndex, material.metallic);
+
+	int texEnabledIndex = glGetUniformLocation(id, "texturesEnabled");
+	glUniform1i(texEnabledIndex, material.diffuseTexture.empty() ? 0 : 1);
+
+	int diffTexIndex = glGetUniformLocation(id, "diffuseTexture");
+	material.diffuseTexture.bind();
 
 	currentMaterial = material;
 }

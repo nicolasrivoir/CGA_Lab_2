@@ -136,9 +136,9 @@ Matrix<4, 4> math::quaternion_to_rotation_matrix(const Matrix<4, 1>& quaternion)
 	float z = quaternion[2][0];
 	float w = quaternion[3][0];
 	return {
-		std::array<float,4>	{	1 - 2 * (y * y - z * z),			  2 * (x * y - z * w),			  2 * (x * z + y * w),			0	},
-		std::array<float,4>	{	  2 * (x * y + w * z),			1 - 2 * (x * x - z * z),			  2 * (y * z - w * x),			0	},
-		std::array<float,4>	{	  2 * (x * z - w * y),			  2 * (y * z + w * x),			1 - 2 * (x * x - y * y),			0	},
+		std::array<float,4>	{	1 - 2 * (y * y + z * z),			  2 * (x * y - z * w),			  2 * (x * z + y * w),			0	},
+		std::array<float,4>	{	  2 * (x * y + w * z),			1 - 2 * (x * x + z * z),			  2 * (y * z - w * x),			0	},
+		std::array<float,4>	{	  2 * (x * z - w * y),			  2 * (y * z + w * x),			1 - 2 * (x * x + y * y),			0	},
 		std::array<float,4>	{		0,								0,							0,					1	}
 	};
 }

@@ -1,6 +1,6 @@
 #version 400 core
 
-uniform vec3 objectColor;
+uniform vec3 baseColor;
 uniform vec3 lightPosition;
 uniform vec3 lightColor;
 uniform float diffuseCoefficient;
@@ -8,13 +8,19 @@ uniform float specularCoefficient;
 uniform float specularExponent;
 uniform float metalnessFactor;
 uniform float gamma;
+uniform sampler2D diffuseTexture;
+uniform int texturesEnabled;
 
 in vec3 fragPos;
 in vec3 fragNormal;
+in vec2 fragTexCoord;
 
 layout(location = 0) out vec4 fragColor;
 
 void main(void) {
+
+	vec3 objectColor = (texturesEnabled == 1) ? texture(diffuseTexture, fragTexCoord).xyz * baseColor : baseColor;
+
     // Ambient light
     float ambientStrength = 0.5;
     vec3 ambient = ambientStrength * objectColor;
