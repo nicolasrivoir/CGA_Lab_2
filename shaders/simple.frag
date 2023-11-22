@@ -9,7 +9,9 @@ uniform float specularExponent;
 uniform float metalnessFactor;
 uniform float gamma;
 uniform sampler2D diffuseTexture;
-uniform int texturesEnabled;
+uniform int diffTexEnabled;
+uniform sampler2D normalTexture;
+uniform int normTexEnabled;
 
 in vec3 fragPos;
 in vec3 fragNormal;
@@ -19,14 +21,14 @@ layout(location = 0) out vec4 fragColor;
 
 void main(void) {
 
-	vec3 objectColor = (texturesEnabled == 1) ? texture(diffuseTexture, fragTexCoord).xyz * baseColor : baseColor;
+	vec3 objectColor = (diffTexEnabled == 1) ? texture(diffuseTexture, fragTexCoord).xyz * baseColor : baseColor;
 
     // Ambient light
     float ambientStrength = 0.5;
     vec3 ambient = ambientStrength * objectColor;
 
     // Diffuse reflection
-    vec3 norm = normalize(fragNormal);
+    vec3 norm = (normTexEnabled == 1) ? texture(normalTexture, fragTexCoord).xyz : normalize(fragNormal);
     vec3 lightDir = normalize(lightPosition - fragPos);
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = diffuseCoefficient * diff * lightColor;

@@ -24,6 +24,10 @@ void GUI::shaderPreview(ShaderProgram s, MeshObject &obj)
     float &metalness = mat.metallic;
     float &roughness = mat.roughness;
     Vector3 &color = mat.basecolor;
+    Texture& diff = mat.diffuseTexture;
+    static bool diff_enabled = diff.isEnabled();
+    Texture& norm = mat.normalTexture;
+    static bool norm_enabled = norm.isEnabled();
 
     ImGui::Begin("Shader preview");
 
@@ -33,6 +37,10 @@ void GUI::shaderPreview(ShaderProgram s, MeshObject &obj)
     ImGui::SliderFloat("Metalness", &metalness, 0.0f, 1.0f);
     ImGui::SliderFloat("Roughness", &roughness, 0.0f, 1.0f);
 
+    ImGui::Text("Textures:");
+    ImGui::Checkbox("Diffuse", &diff_enabled);
+    ImGui::Checkbox("Normal", &norm_enabled);
+
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
     ImGui::End();
 
@@ -41,4 +49,18 @@ void GUI::shaderPreview(ShaderProgram s, MeshObject &obj)
 
     s.setCurrentMaterial(mat);
     s.setGamma(gamma);
+
+    if (diff_enabled) {
+        diff.enable();
+    }
+    else {
+        diff.disable();
+    }
+
+    if (norm_enabled) {
+        norm.enable();
+    }
+    else {
+        norm.disable();
+    }
 }

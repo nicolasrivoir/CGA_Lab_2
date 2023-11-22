@@ -16,14 +16,27 @@ Texture::Texture(std::vector<BYTE> image, unsigned int width, unsigned int heigh
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.data());
 	glGenerateMipmap(GL_TEXTURE_2D);
 
+	enabled = true;
+
 }
 
-void Texture::bind() const
+void Texture::bind(unsigned int slot) const
 {
+	glActiveTexture(GL_TEXTURE0 + slot);
 	glBindTexture(GL_TEXTURE_2D, id);
 }
 
-bool Texture::empty() const
+bool Texture::isEnabled() const
 {
-	return id == 0;
+	return enabled;
+}
+
+void Texture::enable()
+{
+	enabled = true;
+}
+
+void Texture::disable()
+{
+	enabled = false;
 }

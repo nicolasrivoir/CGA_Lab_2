@@ -39,7 +39,7 @@ Application::Application() : renderer(window), gui(window)
 
 void Application::mainLoop()
 {
-	auto file = GLTF::loadGLB("data/models/truck.glb");
+	auto file = GLTF::loadGLB("data/models/normal.glb");
 	Scene scene = GLTF::extractScenes(file)[0];
 
 	Timer* timer = Timer::getInstance();
