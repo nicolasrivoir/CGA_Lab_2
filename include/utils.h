@@ -240,6 +240,7 @@ namespace geometry {
 		std::vector<Vector3> positions;
 		std::vector<Vector3> normals;
 		std::vector<Vector2> texcoords;
+		std::vector<Vector4> tangents;
 
 		std::vector<unsigned int> indices;
 
