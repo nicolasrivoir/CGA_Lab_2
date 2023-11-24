@@ -14,4 +14,4 @@ x86/
 *.ilk
 *.exe
 
-!libraries/SDL2-2.0.12/lib/*
+!lib/SDL2-2.0.12/lib/*
