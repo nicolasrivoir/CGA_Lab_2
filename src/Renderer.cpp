@@ -22,10 +22,10 @@ void Renderer::initObject(MeshObject& obj)
 		const size_t faceCount = mesh.indices.size();
 
 		GLuint vertexArray;
-		GLuint buffers[4];
+		GLuint buffers[5];
 		glGenVertexArrays(1, &vertexArray); // allocate & assign a Vertex Array Object (VAO)
 		glBindVertexArray(vertexArray); // bind VAO as current object
-		glGenBuffers(4, buffers); // allocate the Vertex Buffer Objects (VBO)
+		glGenBuffers(5, buffers); // allocate the Vertex Buffer Objects (VBO)
 
 		GLfloat* positions = reinterpret_cast<GLfloat*>(mesh.positions.data());
 		glBindBuffer(GL_ARRAY_BUFFER, buffers[0]); // bind first VBO as active buffer object
@@ -46,9 +46,15 @@ void Renderer::initObject(MeshObject& obj)
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 		glEnableVertexAttribArray(2);    // Enable attribute index 2 (texcoords)
 
+		GLfloat* tangents = reinterpret_cast<GLfloat*>(mesh.tangents.data());
+		glBindBuffer(GL_ARRAY_BUFFER, buffers[3]); // bind second VBO as active buffer object
+		glBufferData(GL_ARRAY_BUFFER, 4 * vertexCount * sizeof(GLfloat), tangents, GL_STATIC_DRAW);
+		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(3);    // Enable attribute index 3 (tangents)
+
 		GLfloat* indices = reinterpret_cast<GLfloat*>(mesh.indices.data());
 		const unsigned int indexCount = mesh.indices.size();
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]); // bind second VBO as active buffer object
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[4]); // bind second VBO as active buffer object
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(GLuint), indices, GL_STATIC_DRAW);
 
 		glEnable(GL_DEPTH_TEST); // enable depth testing

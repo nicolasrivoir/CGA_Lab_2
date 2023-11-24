@@ -16,6 +16,7 @@ uniform int normTexEnabled;
 in vec3 fragPos;
 in vec3 fragNormal;
 in vec2 fragTexCoord;
+in mat3 TBN;
 
 layout(location = 0) out vec4 fragColor;
 
@@ -24,11 +25,17 @@ void main(void) {
 	vec3 objectColor = (diffTexEnabled == 1) ? texture(diffuseTexture, fragTexCoord).xyz * baseColor : baseColor;
 
     // Ambient light
-    float ambientStrength = 0.5;
+    float ambientStrength = 0.3;
     vec3 ambient = ambientStrength * objectColor;
 
     // Diffuse reflection
-    vec3 norm = (normTexEnabled == 1) ? texture(normalTexture, fragTexCoord).xyz : normalize(fragNormal);
+    vec3 norm = fragNormal;
+	if (normTexEnabled == 1) {
+		norm = texture(normalTexture, fragTexCoord).xyz;
+		norm = norm * 2.0 - 1.0;   
+		norm = normalize(TBN * norm);
+	}
+
     vec3 lightDir = normalize(lightPosition - fragPos);
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = diffuseCoefficient * diff * lightColor;

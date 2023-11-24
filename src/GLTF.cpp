@@ -128,6 +128,12 @@ std::vector<MeshObject> GLTF::extractMeshes(GLTF_t* file, unsigned int scene_ind
 					new_mesh.texcoords = extract_from_accessor<math::Vector2>(file->model, texcoords_accessor);
 				}
 
+				const int tangents_index = primitive.attributes["TANGENT"];
+				if (tangents_index >= 0) {
+					const tinygltf::Accessor& tangents_accessor = file->model.accessors[tangents_index];
+					new_mesh.tangents = extract_from_accessor<math::Vector4>(file->model, tangents_accessor);
+				}
+
 				const int indices_index = primitive.indices;
 				if (indices_index >= 0) {
 					const tinygltf::Accessor& indices_accessor = file->model.accessors[indices_index];
