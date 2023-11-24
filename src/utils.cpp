@@ -15,6 +15,10 @@ Vector3::Vector3() : x(0), y(0), z(0) {}
 
 Vector3::Vector3(float x, float y, float z) : x(x), y(y), z(z) {}
 
+math::Vector4::Vector4() : x(0), y(0), z(0), w(0) {}
+
+math::Vector4::Vector4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {}
+
 bool math::operator == (const Vector2& v1, const Vector2& v2) {
 	return (v1.x == v2.x) && (v1.y == v2.y);
 }
@@ -84,7 +88,7 @@ Vector3 math::operator / (const Vector3& v, const float k) {
 
 std::ostream& math::operator<<(std::ostream& out, const Vector3& v)
 {
-	return out << "(" << v.x << ", " << v.y << v.z << ")";
+	return out << "(" << v.x << ", " << v.y << ", " << ", " << v.z << ")";
 }
 
 float math::dot_product(const Vector3 &v1, const Vector3 &v2) {
@@ -122,6 +126,56 @@ float math::norm2(const Vector3 &v) {
 	Vector3 n = v;
 	float magnitude = std::sqrt(n.x * n.x + n.y * n.y + n.z * n.z);
 	return magnitude;
+}
+
+bool math::operator==(const Vector4& v1, const Vector4& v2)
+{
+	return (v1.x == v2.x) && (v1.y == v2.y) && (v1.z == v2.z) && (v1.w == v2.w);
+}
+
+bool math::operator!=(const Vector4& v1, const Vector4& v2)
+{
+	return !(v1 == v2);
+}
+
+Vector4 math::operator+(const Vector4& v1, const Vector4& v2)
+{
+	return Vector4(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z, v1.w + v2.w);
+}
+
+Vector4 math::operator-(const Vector4& v1, const Vector4& v2)
+{
+	return v1 + (-v2);
+}
+
+Vector4 math::operator-(const Vector4& v)
+{
+	return -1 * v;
+}
+
+Vector4 math::operator*(const Vector4& v, const float k)
+{
+	return Vector4(k*v.x, k*v.y, k*v.z, k*v.w);
+}
+
+Vector4 math::operator*(const float k, const Vector4& v)
+{
+	return v * k;
+}
+
+Vector4 math::operator/(const Vector4& v, const float k)
+{
+	return (1/k)*v;
+}
+
+std::ostream& math::operator<<(std::ostream& out, const Vector4& v)
+{
+	return out << "(" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ")";
+}
+
+Vector4 math::element_wise_multiplication(const Vector4& v1, const Vector4& v2)
+{
+	return Vector4(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z, v1.w * v2.w);
 }
 
 Vector3 math::normal_interpolation(const Vector3& n1, const Vector3& n2, const Vector3& n3, float u, float v)

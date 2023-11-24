@@ -39,6 +39,16 @@ namespace math {
 
 	};
 
+	struct Vector4 {
+
+		float x, y, z, w;
+
+		Vector4();
+
+		Vector4(float x, float y, float z, float w);
+
+	};
+
 	bool operator == (const Vector2& v1, const Vector2& v2);
 
 	bool operator != (const Vector2& v1, const Vector2& v2);
@@ -82,6 +92,26 @@ namespace math {
 	Vector3 normalize(const Vector3& v);
 
 	float norm2(const Vector3& v);
+
+	bool operator == (const Vector4& v1, const Vector4& v2);
+
+	bool operator != (const Vector4& v1, const Vector4& v2);
+
+	Vector4 operator + (const Vector4& v1, const Vector4& v2);
+
+	Vector4 operator - (const Vector4& v1, const Vector4& v2);
+
+	Vector4 operator - (const Vector4& v);
+
+	Vector4 operator * (const Vector4& v, const float k);
+
+	Vector4 operator * (const float k, const Vector4& v);
+
+	Vector4 operator / (const Vector4& v, const float k);
+
+	std::ostream& operator << (std::ostream& out, const Vector4& v);
+
+	Vector4 element_wise_multiplication(const Vector4& v1, const Vector4& v2);
 
 	/* Given vertex shading normals n1, n2, n3, returns shading normal at triangle barycentric coordinates u,v  */
 	Vector3 normal_interpolation(const Vector3& n1, const Vector3& n2, const Vector3& n3, float u, float v);
