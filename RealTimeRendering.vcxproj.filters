@@ -105,6 +105,12 @@
     <ClCompile Include="lib\imgui\backends\imgui_impl_opengl3.cpp">
       <Filter>Libraries\ImGui\backends</Filter>
     </ClCompile>
+    <ClCompile Include="include\PlayerCamera.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PlayerCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camara.h">
