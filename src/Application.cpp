@@ -7,11 +7,25 @@
 #include "imgui.h"
 #include "backends/imgui_impl_sdl2.h"
 #include "backends/imgui_impl_opengl3.h"
+#include "utils.h"
+
+#include "glm/glm.hpp"
+#include "glm/matrix.hpp"
+#include <glm/gtc/type_ptr.hpp>
+
+using namespace math;
 
 void Application::handleEvent(SDL_Event& e)
 {
+
 	ImGui_ImplSDL2_ProcessEvent(&e);
 	switch (e.type) {
+	case SDL_MOUSEMOTION:
+	
+		camera.yaw += float(e.motion.xrel) * 0.1f;
+		camera.pitch -= float(e.motion.yrel) * 0.1f;
+
+		break;
 	case SDL_QUIT:
 		quit();
 		break;
@@ -20,12 +34,73 @@ void Application::handleEvent(SDL_Event& e)
 			window.resize(e.window.data1, e.window.data2);
 		}
 		break;
-	//KEYBOARD EVENTS
+		//KEYBOARD EVENTS
 	case SDL_KEYDOWN:
-		if (e.key.keysym.sym == SDLK_ESCAPE) {
+		switch (e.key.keysym.sym) {
+		case SDLK_ESCAPE:
 			quit();
+			break;
+		case SDLK_m:
+			std::cout << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
+			break;
+		case SDLK_o:
+			SDL_SetRelativeMouseMode(SDL_TRUE);
+			break;
+		case SDLK_p:
+			SDL_SetRelativeMouseMode(SDL_FALSE);
+			break;
 		}
 	}
+
+	const Uint8* keystate = SDL_GetKeyboardState(NULL);
+
+	float delta_move = 0.1;
+	// Inside your main loop, after SDL_PollEvent
+	if (keystate[SDL_SCANCODE_W]) {
+		// Move forward
+		camera.position = camera.position + camera.getForward()*delta_move;
+		std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
+	}
+	if (keystate[SDL_SCANCODE_S]) {
+		// Move backward
+		camera.position = camera.position - camera.getForward() * delta_move;
+		std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
+	}
+	if (keystate[SDL_SCANCODE_A]) {
+		// Move left
+		camera.position = camera.position - camera.getRight() * delta_move;
+		std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
+	}
+	if (keystate[SDL_SCANCODE_D]) {
+		// Move right
+		camera.position = camera.position + camera.getRight() * delta_move;
+		std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
+	}
+	if (keystate[SDL_SCANCODE_SPACE]) {
+		// Move up or jump
+		camera.position.y += delta_move;
+		std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
+	}
+	if (keystate[SDL_SCANCODE_LSHIFT]) {
+		// Move down or crouch
+		camera.position.y -= delta_move;
+		std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
+	}
+	if (keystate[SDL_SCANCODE_LEFT]) {
+		// Rotate or move left
+		camera.position.y -= delta_move;
+		std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
+	}
+	if (keystate[SDL_SCANCODE_RIGHT]) {
+		// Rotate or move right
+	}
+	if (keystate[SDL_SCANCODE_UP]) {
+		// Rotate or move up
+	}
+	if (keystate[SDL_SCANCODE_DOWN]) {
+		// Rotate or move down
+	}
+
 }
 
 void Application::quit()
@@ -35,6 +110,8 @@ void Application::quit()
 
 Application::Application() : renderer(window), gui(window)
 {
+	SDL_SetRelativeMouseMode(SDL_TRUE);
+	camera = PlayerCamera(Vector3(0.f,-.7f,-3.8f), 15.5f, 6927.02f);
 }
 
 void Application::mainLoop()
@@ -51,7 +128,12 @@ void Application::mainLoop()
 		if (SDL_PollEvent(&sdlEvent))
 		{
 			handleEvent(sdlEvent);
+
 		}
+
+		renderer.view = camera.updateView();
+
+
 		timer->tick();
 		if (timer->getDeltaTime() >= 1.0f / framerateLimit) {
 			scene.update();

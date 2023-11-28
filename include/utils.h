@@ -161,6 +161,8 @@ namespace math {
 
 	float max(float a, float b);
 
+	float min(float a, float b);
+
 	float max(float a, float b, float c);
 
 	Vector3 reflectRay(Vector3 dir, Vector3 norm);
