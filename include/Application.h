@@ -4,6 +4,7 @@
 #include "Window.h"
 #include "Renderer.h"
 #include "GUI.h"
+#include "PlayerCamera.h"
 
 #include <memory>
 
@@ -17,6 +18,8 @@ private:
 	Renderer renderer;
 
 	GUI gui;
+
+	PlayerCamera camera;
 
 	bool running = true;
 

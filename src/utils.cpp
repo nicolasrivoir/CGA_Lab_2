@@ -329,6 +329,10 @@ float math::max(float a, float b) {
 	return a > b ? a : b;
 }
 
+float math::min(float a, float b) {
+	return a < b ? a : b;
+}
+
 float math::max(float a, float b, float c) {
 	if (a == 0 && b == 0 && c == 0) {
 		return 0.001;
