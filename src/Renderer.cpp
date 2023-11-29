@@ -114,7 +114,7 @@ void Renderer::draw(MeshObject& obj) {
 		unsigned int height = window->getHeight();
 		height = (height == 0) ? 1 : height;
 		float aspect = static_cast<float>(width) / height;
-		glm::mat4 projection = glm::perspective(45.0f, aspect, 1.0f, 100.f);
+		glm::mat4 projection = glm::perspective(45.0f, aspect, 1.0f, 100000.f);
 
 		// Create view matrix for the camera
 		//r += 0.03; //for camera rotation
