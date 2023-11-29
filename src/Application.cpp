@@ -17,13 +17,16 @@ using namespace math;
 
 void Application::handleEvent(SDL_Event& e)
 {
+	Timer* timer = Timer::getInstance();
+	float MOUSE_SENSITIVITY = 10.f;
+	float delta_time = timer->getDeltaTime();
 
 	ImGui_ImplSDL2_ProcessEvent(&e);
 	switch (e.type) {
 	case SDL_MOUSEMOTION:
 	
-		camera.yaw += float(e.motion.xrel) * 0.1f;
-		camera.pitch -= float(e.motion.yrel) * 0.1f;
+		camera.yaw += float(e.motion.xrel) * MOUSE_SENSITIVITY * delta_time;
+		camera.pitch -= float(e.motion.yrel) * MOUSE_SENSITIVITY * delta_time;
 
 		break;
 	case SDL_QUIT:
@@ -54,41 +57,41 @@ void Application::handleEvent(SDL_Event& e)
 
 	const Uint8* keystate = SDL_GetKeyboardState(NULL);
 
-	float delta_move = 0.1;
+	float delta_move = 5.f;
 	// Inside your main loop, after SDL_PollEvent
 	if (keystate[SDL_SCANCODE_W]) {
 		// Move forward
-		camera.position = camera.position + camera.getForward()*delta_move;
+		camera.position = camera.position + camera.getForward() * delta_move * delta_time;
 		std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
 	}
 	if (keystate[SDL_SCANCODE_S]) {
 		// Move backward
-		camera.position = camera.position - camera.getForward() * delta_move;
+		camera.position = camera.position - camera.getForward() * delta_move * delta_time;
 		std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
 	}
 	if (keystate[SDL_SCANCODE_A]) {
 		// Move left
-		camera.position = camera.position - camera.getRight() * delta_move;
+		camera.position = camera.position - camera.getRight() * delta_move * delta_time;
 		std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
 	}
 	if (keystate[SDL_SCANCODE_D]) {
 		// Move right
-		camera.position = camera.position + camera.getRight() * delta_move;
+		camera.position = camera.position + camera.getRight() * delta_move * delta_time;
 		std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
 	}
 	if (keystate[SDL_SCANCODE_SPACE]) {
 		// Move up or jump
-		camera.position.y += delta_move;
+		camera.position.y += delta_move * delta_time;
 		std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
 	}
 	if (keystate[SDL_SCANCODE_LSHIFT]) {
 		// Move down or crouch
-		camera.position.y -= delta_move;
+		camera.position.y -= delta_move * delta_time;
 		std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
 	}
 	if (keystate[SDL_SCANCODE_LEFT]) {
 		// Rotate or move left
-		camera.position.y -= delta_move;
+		camera.position.y -= delta_move * delta_time;
 		std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
 	}
 	if (keystate[SDL_SCANCODE_RIGHT]) {
@@ -101,6 +104,11 @@ void Application::handleEvent(SDL_Event& e)
 		// Rotate or move down
 	}
 
+	for (int i = 0; i < SDL_NUM_SCANCODES; i++) {
+		if (keystate[i] != 0) {
+			std::cout << "Key " << SDL_GetScancodeName(static_cast<SDL_Scancode>(i)) << " is pressed." << std::endl;
+		}
+	}
 }
 
 void Application::quit()
