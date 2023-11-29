@@ -108,6 +108,12 @@
     <ClCompile Include="include\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="include\PlayerCamera.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PlayerCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camara.h">

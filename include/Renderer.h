@@ -5,6 +5,9 @@
 #include "ShaderProgram.h"
 #include "utils.h"
 #include "MeshObject.h"
+#include "glm/glm.hpp"
+#include "glm/matrix.hpp"
+#include <glm/gtc/type_ptr.hpp>
 
 #include <memory>
 
@@ -25,6 +28,8 @@ private:
 	void initObject(MeshObject& obj);
 
 public:
+
+	glm::mat4 view;
 
 	Renderer(Window& window);
 

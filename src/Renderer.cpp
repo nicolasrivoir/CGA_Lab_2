@@ -68,6 +68,9 @@ void Renderer::initObject(MeshObject& obj)
 Renderer::Renderer(Window& window) : window(&window), shaderProgram(GLSL("./shaders/simple.vert"), GLSL("./shaders/simple.frag"))
 {
 	shaderProgram.setGamma(2.2f);
+	view = glm::mat4(1.0);
+	//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -10.0f));
+	//view = glm::rotate(view, 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
 }
 
 
@@ -117,11 +120,11 @@ void Renderer::draw(MeshObject& obj) {
 		glm::mat4 projection = glm::perspective(45.0f, aspect, 1.0f, 100000.f);
 
 		// Create view matrix for the camera
-		//r += 0.03; //for camera rotation
-		glm::mat4 view(1.0);
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -4.0f));
-		view = glm::rotate(view, 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
-		view = glm::rotate(view, r, glm::vec3(0.0f, 1.0f, 0.0f));
+		//r += 0.003; //for camera rotation
+		//glm::mat4 view(1.0);
+		//view = glm::mat4(1.0);
+		//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -10.0f));
+		//view = glm::rotate(view, 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
 
 		// Create model matrix for model transformations
 		glm::mat4 model = reinterpret_cast<glm::mat4&>(obj.transformation);
