@@ -39,7 +39,7 @@ Application::Application() : renderer(window), gui(window)
 
 void Application::mainLoop()
 {
-	auto file = GLTF::loadGLB("data/models/normal.glb");
+	auto file = GLTF::loadGLB("data/models/fantasyForest.glb");
 	Scene scene = GLTF::extractScenes(file)[0];
 
 	Timer* timer = Timer::getInstance();
@@ -56,7 +56,7 @@ void Application::mainLoop()
 		if (timer->getDeltaTime() >= 1.0f / framerateLimit) {
 			scene.update();
 			scene.render(renderer);
-			gui.shaderPreview(renderer.getShaderProgram(), scene.objects[0]);
+			//gui.shaderPreview(renderer.getShaderProgram(), scene.objects[0]);
 			renderer.clear();
 			timer->reset();
 			Sleep(8);
