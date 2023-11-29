@@ -57,7 +57,7 @@ void Application::handleEvent(SDL_Event& e)
 
 	const Uint8* keystate = SDL_GetKeyboardState(NULL);
 
-	float delta_move = 5.f;
+	float delta_move = 50.f;
 	// Inside your main loop, after SDL_PollEvent
 	if (keystate[SDL_SCANCODE_W]) {
 		// Move forward
@@ -67,32 +67,32 @@ void Application::handleEvent(SDL_Event& e)
 	if (keystate[SDL_SCANCODE_S]) {
 		// Move backward
 		camera.position = camera.position - camera.getForward() * delta_move * delta_time;
-		std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
+		//std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
 	}
 	if (keystate[SDL_SCANCODE_A]) {
 		// Move left
 		camera.position = camera.position - camera.getRight() * delta_move * delta_time;
-		std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
+		//std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
 	}
 	if (keystate[SDL_SCANCODE_D]) {
 		// Move right
 		camera.position = camera.position + camera.getRight() * delta_move * delta_time;
-		std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
+		//std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
 	}
 	if (keystate[SDL_SCANCODE_SPACE]) {
 		// Move up or jump
 		camera.position.y += delta_move * delta_time;
-		std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
+		//std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
 	}
 	if (keystate[SDL_SCANCODE_LSHIFT]) {
 		// Move down or crouch
 		camera.position.y -= delta_move * delta_time;
-		std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
+		//std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
 	}
 	if (keystate[SDL_SCANCODE_LEFT]) {
 		// Rotate or move left
 		camera.position.y -= delta_move * delta_time;
-		std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
+		//std::cout << "Camera position : " << camera.position.x << "; " << camera.position.y << "; " << camera.position.z << "Pitch: " << camera.pitch << "; Yaw: " << camera.yaw << std::endl;
 	}
 	if (keystate[SDL_SCANCODE_RIGHT]) {
 		// Rotate or move right
@@ -102,12 +102,6 @@ void Application::handleEvent(SDL_Event& e)
 	}
 	if (keystate[SDL_SCANCODE_DOWN]) {
 		// Rotate or move down
-	}
-
-	for (int i = 0; i < SDL_NUM_SCANCODES; i++) {
-		if (keystate[i] != 0) {
-			std::cout << "Key " << SDL_GetScancodeName(static_cast<SDL_Scancode>(i)) << " is pressed." << std::endl;
-		}
 	}
 }
 
@@ -139,13 +133,11 @@ void Application::mainLoop()
 
 		}
 
-		renderer.view = camera.updateView();
-
-
 		timer->tick();
 		if (timer->getDeltaTime() >= 1.0f / framerateLimit) {
 			scene.update();
 			scene.render(renderer);
+			renderer.view = camera.updateView();
 			//gui.shaderPreview(renderer.getShaderProgram(), scene.objects[0]);
 			renderer.clear();
 			timer->reset();
