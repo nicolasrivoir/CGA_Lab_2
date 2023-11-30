@@ -1,22 +1,3 @@
-#ifndef GUI_H
-#define GUI_H
-
-#include "Window.h"
-#include "ShaderProgram.h"
-#include "MeshObject.h"
-
-class GUI
-{
-private:
-
-	void foo() {}
-
-public:
-
-	GUI(Window& window);
-
-	void shaderPreview(ShaderProgram s, MeshObject &obj);
-
-};
-
-#endif
+version https://git-lfs.github.com/spec/v1
+oid sha256:036593a2be579859191fee2f78dbb7e72fb5cf8bddff16a7170f3824b5b32e24
+size 237

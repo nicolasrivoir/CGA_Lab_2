@@ -1,33 +1,3 @@
-#ifndef WINDOW_H
-#define WINDOW_H
-
-#include "glad/glad.h"
-#include "SDL.h"
-
-class Window
-{
-
-private:
-
-	SDL_Window* window;
-
-	SDL_GLContext context;
-
-public:
-
-	Window();
-
-	void swapBuffers();
-
-	void resize(unsigned int width, unsigned int height);
-
-	unsigned int getWidth();
-
-	unsigned int getHeight();
-
-	~Window();
-
-};
-
-#endif
-
+version https://git-lfs.github.com/spec/v1
+oid sha256:ac28b444cabbdda35fcb1a10cb22c726489febc170c79d269fb2f729f4403c2a
+size 328

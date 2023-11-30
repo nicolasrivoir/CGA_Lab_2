@@ -1,30 +1,3 @@
-#ifndef SCENE_H
-#define SCENE_H
-
-#include "Renderer.h"
-#include "MeshObject.h"
-#include "Camara.h"
-
-class Scene
-{
-private:
-
-	friend class Application;
-
-	std::vector<MeshObject> objects;
-
-	//cam::Camara camera;
-
-public:
-
-	void addObject(MeshObject &obj);
-
-	//void setCamera(cam::Camara cam);
-
-	void update();
-
-	void render(Renderer& renderer);
-
-};
-
-#endif
+version https://git-lfs.github.com/spec/v1
+oid sha256:3594befb2c27ae851a00e95c4d18c1682ffbdd3457237a2da8efc8f27bbc776a
+size 354

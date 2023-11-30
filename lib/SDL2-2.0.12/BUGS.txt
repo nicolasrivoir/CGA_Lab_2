@@ -1,16 +1,3 @@
-
-Bugs are now managed in the SDL bug tracker, here:
-
-    https://bugzilla.libsdl.org/
-
-You may report bugs there, and search to see if a given issue has already
- been reported, discussed, and maybe even fixed.
-
-
-You may also find help at the SDL forums/mailing list:
-
-    https://discourse.libsdl.org/
-
-Bug reports are welcome here, but we really appreciate if you use Bugzilla, as
- bugs discussed on the mailing list may be forgotten or missed.
-
+version https://git-lfs.github.com/spec/v1
+oid sha256:620cebfdab651fd9dc9aa049b8e54035a5714096eb637f65a16dc8472ea5ac80
+size 447

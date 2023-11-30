@@ -1,23 +1,3 @@
-#ifndef GLSL_H
-#define GLSL_H
-
-#include <memory>
-#include <string_view>
-
-class GLSL {
-
-	using BYTE = unsigned char;
-
-private:
-
-	std::shared_ptr<const BYTE> source;
-
-public:
-
-	GLSL(std::string_view fname);
-
-	const BYTE* getSource();
-
-};
-
-#endif
+version https://git-lfs.github.com/spec/v1
+oid sha256:6d871c84c198835db50893e4edd41ce2641800ff9e52182b38c1a32285ba2e06
+size 243
