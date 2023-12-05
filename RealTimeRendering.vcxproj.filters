@@ -114,6 +114,9 @@
     <ClCompile Include="src\PlayerCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Physics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camara.h">
@@ -187,6 +190,9 @@
     </ClInclude>
     <ClInclude Include="lib\imgui\backends\imgui_impl_opengl3.h">
       <Filter>Libraries\ImGui\backends</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Physics.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

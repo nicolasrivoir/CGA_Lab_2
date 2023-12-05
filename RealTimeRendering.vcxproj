@@ -157,6 +157,7 @@
     <ClCompile Include="lib\imgui\imgui_tables.cpp" />
     <ClCompile Include="lib\imgui\imgui_widgets.cpp" />
     <ClCompile Include="lib\imgui\misc\cpp\imgui_stdlib.cpp" />
+    <ClCompile Include="src\Physics.cpp" />
     <ClCompile Include="src\PlayerCamera.cpp" />
     <ClCompile Include="include\PlayerCamera.h" />
     <ClCompile Include="src\Application.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="include\GLTF.h" />
     <ClInclude Include="include\GUI.h" />
     <ClInclude Include="include\MeshObject.h" />
+    <ClInclude Include="include\Physics.h" />
     <ClInclude Include="include\Renderer.h" />
     <ClInclude Include="include\Scene.h" />
     <ClInclude Include="include\Settings.h" />

@@ -5,6 +5,7 @@
 #include "Renderer.h"
 #include "GUI.h"
 #include "PlayerCamera.h"
+#include "Physics.h"
 
 #include <memory>
 
@@ -19,6 +20,8 @@ private:
 
 	GUI gui;
 
+	Physics* physics;
+
 	PlayerCamera camera;
 
 	bool running = true;
@@ -28,6 +31,8 @@ private:
 	void handleEvent(SDL_Event& e);
 
 	void quit();
+
+	bool gravity;
 
 public:
 
