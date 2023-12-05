@@ -1,17 +1,3 @@
-.vs/
-Debug/
-Release/
-x64/
-x86/
-
-*.suo
-*.user
-*.log
-*.tlog
-*.pdb
-*.ipdb
-*.iobj
-*.ilk
-*.exe
-
-!lib/SDL2-2.0.12/lib/*
+version https://git-lfs.github.com/spec/v1
+oid sha256:4ace2a14d03c7d7ad9ac813a1be57c54b135f8110013e514687d4c67182512e4
+size 114

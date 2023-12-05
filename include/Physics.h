@@ -1,28 +1,3 @@
-#ifndef PHYSICS_H
-#define PHYSICS_H
-
-#include "bullet/btBulletDynamicsCommon.h"
-
-class Physics
-{
-
-private:
-    //Bullet world
-    btBroadphaseInterface* broadphase;
-    btDefaultCollisionConfiguration* collisionConfiguration;
-    btCollisionDispatcher* dispatcher;
-    btSequentialImpulseConstraintSolver* solver;
-
-    // Create a dynamic sphere
-    btCollisionShape* fallShape;
-    btDefaultMotionState* fallMotionState;
-    btRigidBody* fallRigidBody;
-public:
-
-	Physics();
-	void CleanUp();
-    void Update(float seconds);
-    btDiscreteDynamicsWorld* dynamicsWorld;
-};
-
-#endif
+version https://git-lfs.github.com/spec/v1
+oid sha256:510e4664c07af4ae9a0928731a67ff9e8c7872ed451027a233a898c41684dfa6
+size 578

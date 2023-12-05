@@ -1,24 +1,3 @@
-// Settings.h
-#ifndef SETTINGS_H
-#define SETTINGS_H
-
-enum ShadingType {
-    INTERPOLATED,  // 0
-    FACETED,      // 1
-};
-
-class Settings {
-public:
-    Settings();
-    void setGameSpeed(float speed);
-    bool wireframeActivated;
-    bool texturesActivated;
-    ShadingType shadingType;
-
-//  void chageLight(Vec3 color, Vec3 direction);
-    void chageLight(double color, double direction);
-
-};
-
-#endif // SETTINGS_H
-#pragma once
+version https://git-lfs.github.com/spec/v1
+oid sha256:1e427fab67b51df7354d1a668fd71b8c0e90e66a79dbce56533f723cbc3a2434
+size 428

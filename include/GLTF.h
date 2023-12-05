@@ -1,28 +1,3 @@
-#ifndef GLTF_H
-#define GLTF_H
-
-#include <string_view>
-#include "utils.h"
-#include "Scene.h"
-#include "MeshObject.h"
-#include "Texture.h"
-#include "Camera.h"
-
-namespace GLTF
-{
-	using BYTE = unsigned char;
-
-	struct GLTF_t;
-
-	GLTF_t* loadGLB(std::string_view path);
-
-	std::vector<MeshObject> extractMeshes(GLTF_t* file, unsigned int scene_index = 0);
-
-	std::vector<CamConstructorData> extractCameras(GLTF_t* file, unsigned int scene_index = 0);
-
-	std::vector<Scene> extractScenes(GLTF_t* file);
-
-}
-
-
-#endif
+version https://git-lfs.github.com/spec/v1
+oid sha256:7fd172681927c4d6a37717d2d28b89cc842951d2c2b9ada2a1512e7b8d47ffea
+size 503
