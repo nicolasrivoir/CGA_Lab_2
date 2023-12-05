@@ -4,14 +4,31 @@
 using namespace math;
 
 
-PlayerCamera::PlayerCamera(Vector3 position, float pitch, float yaw) : position(position), pitch(pitch), yaw(yaw) {}
+PlayerCamera::PlayerCamera(Vector3 position, float pitch, float yaw, btDiscreteDynamicsWorld* dynamicsWorld) : position(position), pitch(pitch), yaw(yaw), dynamicsWorld(dynamicsWorld){
+	btCollisionShape* fallShape = new btSphereShape(1);
+	btDefaultMotionState* fallMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(position.x, position.y, position.z)));
+	btScalar mass = 1;
+	btVector3 fallInertia(0, 0, 0);
+	fallShape->calculateLocalInertia(mass, fallInertia);
+	btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, fallMotionState, fallShape, fallInertia);
+	fallRigidBody = new btRigidBody(fallRigidBodyCI);
+	fallRigidBody->activate(true);
+	dynamicsWorld->addRigidBody(fallRigidBody);
+}
+
 PlayerCamera::PlayerCamera() {
-	PlayerCamera(Vector3(0.f, 0.f, 0.f), 0.5f, 0.f);
+	PlayerCamera(Vector3(0.f, 0.f, 0.f), 0.5f, 0.f, NULL);
 }
 
 glm::mat4 PlayerCamera::updateView() {
 
 	pitch = math::max(math::min(pitch, 89.0f), -89.0f);
+
+	btTransform trans;
+	fallRigidBody->getMotionState()->getWorldTransform(trans);
+	position.x = trans.getOrigin().getX();
+	position.y = trans.getOrigin().getY();
+	position.z = trans.getOrigin().getZ();
 
 	// Ensure camera.position is glm::vec3
 	glm::vec3 camPos = glm::vec3(position.x, position.y, position.z);

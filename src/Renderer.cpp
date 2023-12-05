@@ -69,8 +69,6 @@ Renderer::Renderer(Window& window) : window(&window), shaderProgram(GLSL("./shad
 {
 	shaderProgram.setGamma(2.2f);
 	view = glm::mat4(1.0);
-	//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -10.0f));
-	//view = glm::rotate(view, 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
 }
 
 

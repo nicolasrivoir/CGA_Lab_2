@@ -10,6 +10,8 @@
 #include "glm/matrix.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
+#include "bullet/btBulletDynamicsCommon.h"
+
 using namespace::math;
 
 class PlayerCamera {
@@ -21,11 +23,15 @@ public:
     Vector3 position;
 
     PlayerCamera();
-    PlayerCamera(Vector3 position, float pitch, float yaw);
+    PlayerCamera(Vector3 position, float pitch, float yaw, btDiscreteDynamicsWorld* dynamicsWorld);
 
     glm::mat4 updateView();
     Vector3 getForward();
     Vector3 getRight();
+
+    //phyisics
+    btDiscreteDynamicsWorld* dynamicsWorld;
+    btRigidBody* fallRigidBody;
 
 };
 

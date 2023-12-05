@@ -11,6 +11,7 @@ private:
 
 	friend class Renderer;
 	friend class GUI;
+	friend class Application;
 
 	math::Matrix<4, 4> transformation;
 
